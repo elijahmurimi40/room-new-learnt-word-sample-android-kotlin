@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/wordsFragment">
+
+    <fragment
+        android:id="@+id/wordsFragment"
+        android:name="com.fortie40.newword.ui.words.WordsFragment"
+        android:label="@string/words"
+        tools:layout="@layout/words_fragment" >
+        <action
+            android:id="@+id/action_wordsFragment_to_addEditWordFragment"
+            app:destination="@+id/addEditWordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditWordFragment"
+        android:name="com.fortie40.newword.ui.addEditWords.AddEditWordFragment"
+        android:label="@string/add_edit_words"
+        tools:layout="@layout/add_edit_word_fragment" />
+</navigation>

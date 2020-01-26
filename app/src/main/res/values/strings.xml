@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NewWord</string>
+    <string name="action_settings">Settings</string>
+    <string name="words">Words</string>
+    <string name="add_a_new_word">add a new word button</string>
+    <string name="all_words_screen">all words screen</string>
+    <string name="add_edit_words">addEditWords</string>
+</resources>
