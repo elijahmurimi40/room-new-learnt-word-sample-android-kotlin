@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fortie40.newword.databinding.ActivityMainBinding
+import com.fortie40.newword.roomdatabase.WordRoomDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -32,5 +33,10 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onPause() {
+        WordRoomDatabase.getDataBase(application).close()
+        super.onPause()
     }
 }
