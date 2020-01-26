@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 // dataBinding
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -49,4 +48,14 @@ dependencies {
 
     // DataBinding
     kapt "com.android.databinding:compiler:$gradle_version"
+
+    // Room Components
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
 }
