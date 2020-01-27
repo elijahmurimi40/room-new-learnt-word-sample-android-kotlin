@@ -77,6 +77,7 @@ class AddEditWordFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_settings).isVisible = false
+        menu.findItem(R.id.action_search).isVisible = false
     }
 
     private fun validateWord(): Boolean {

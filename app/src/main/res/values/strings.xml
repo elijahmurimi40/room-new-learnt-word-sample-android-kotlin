@@ -16,4 +16,5 @@
     <string name="save_word">Save Word</string>
     <string name="field_is_required">Field is required</string>
     <string name="successfully_added">Successfully Added</string>
+    <string name="search">Search</string>
 </resources>
