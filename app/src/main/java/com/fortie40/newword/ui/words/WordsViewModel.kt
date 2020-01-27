@@ -1,7 +1,15 @@
 package com.fortie40.newword.ui.words
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import com.fortie40.newword.roomdatabase.WordModel
 
-class WordsViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class WordsViewModel(application: Application) : AndroidViewModel(application) {
+    private val wordsRepository: WordsRepository = WordsRepository(application)
+    val allProducts: LiveData<List<WordModel>>
+
+    init {
+        allProducts = wordsRepository.getAllWords()
+    }
 }
