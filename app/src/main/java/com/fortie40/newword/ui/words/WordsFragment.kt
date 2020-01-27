@@ -1,9 +1,7 @@
 package com.fortie40.newword.ui.words
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -31,6 +29,7 @@ class WordsFragment : Fragment() {
 
         wordsFragmentBinding = WordsFragmentBinding.inflate(inflater)
         root = wordsFragmentBinding.root
+        setHasOptionsMenu(true)
         return root
     }
 
