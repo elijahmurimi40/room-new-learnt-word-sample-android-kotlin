@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
+import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -59,7 +61,14 @@ class AddEditWordFragment : Fragment() {
             if (!validateWord() or !validateLanguage() or !validateMeaning()) {
                 return@setOnClickListener
             }
+
+            val wordModel = WordModel()
+            wordModel.wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
+            wordModel.language = HelperFunctions.toLowerCase(viewModel.language.value!!)
+            wordModel.meaning = HelperFunctions.toLowerCase(viewModel.language.value!!)
+
             CoroutineScope(IO).launch {
+                viewModel.saveWord(wordModel)
                 showToast()
             }
         }
