@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.fortie40.newword.databinding.ActivityMainBinding
 import com.fortie40.newword.roomdatabase.WordRoomDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +16,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Timber tree
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(toolbar)
     }

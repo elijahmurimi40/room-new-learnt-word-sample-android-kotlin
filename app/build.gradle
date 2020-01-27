@@ -61,4 +61,7 @@ dependencies {
 
     // InstantTaskExecutorRule
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
