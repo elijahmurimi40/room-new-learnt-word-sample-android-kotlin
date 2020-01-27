@@ -2,7 +2,6 @@ package com.fortie40.newword
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -41,16 +40,6 @@ class MainActivity : AppCompatActivity() {
         searchView.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
         searchView.maxWidth = Integer.MAX_VALUE
         return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onBackPressed() {
