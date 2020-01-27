@@ -13,4 +13,7 @@
     <string name="add_word">Add Word</string>
     <string name="word_meaning">word meaning</string>
     <string name="meaning">Meaning</string>
+    <string name="save_word">Save Word</string>
+    <string name="field_is_required">Field is required</string>
+    <string name="successfully_added">Successfully Added</string>
 </resources>
