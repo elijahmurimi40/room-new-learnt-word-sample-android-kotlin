@@ -54,8 +54,10 @@ class WordsFragment : Fragment() {
         swipe_to_refresh.isRefreshing = true
         viewModel.allProducts.observe(viewLifecycleOwner, Observer { words ->
             if (words.isEmpty()) {
+                no_words.visibility = View.VISIBLE
                 swipe_to_refresh.isRefreshing = false
             } else {
+                no_words.visibility = View.GONE
                 for (word in words) {
                     Timber.d("***************************************************************")
                     Timber.d("ID: ${word.wordId}")
