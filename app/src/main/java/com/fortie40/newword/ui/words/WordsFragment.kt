@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -64,6 +65,10 @@ class WordsFragment : Fragment() {
                     Timber.d("Word: ${word.wordLearned}")
                     Timber.d("***************************************************************")
                 }
+                val wordAdapter = WordAdapter()
+                words.let { wordAdapter.submitList(it) }
+                word_items.layoutManager = LinearLayoutManager(activity)
+                word_items.adapter = wordAdapter
                 swipe_to_refresh.isRefreshing = false
             }
         })
