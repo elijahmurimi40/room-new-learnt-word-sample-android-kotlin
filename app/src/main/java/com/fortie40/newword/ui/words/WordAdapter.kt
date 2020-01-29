@@ -1,9 +1,11 @@
 package com.fortie40.newword.ui.words
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,10 +20,16 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
+    private lateinit var clickHandler: WordItemClickListener
 
-    constructor(wordList: List<WordModel>): this() {
+    constructor(listener: WordItemClickListener, wordList: List<WordModel>): this() {
+        clickHandler = listener
         wOriginalList = wordList
         wFilteredList = wordList
+    }
+
+    interface WordItemClickListener {
+        fun viewDetails(clickedItemIndex: Int)
     }
 
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
@@ -36,12 +44,33 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         }
     }
 
-    class WordViewHolder(private val binding: WordLayoutBinding):
-        RecyclerView.ViewHolder(binding.root) {
+    inner class WordViewHolder(private val binding: WordLayoutBinding):
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
             binding.executePendingBindings()
+        }
+
+        override fun onClick(p0: View?) {
+            var aPosition = adapterPosition
+            val word = wFilteredList[aPosition].wordLearned
+            for (i in wOriginalList.indices) {
+                if (word == wOriginalList[i].wordLearned) {
+                    aPosition = i
+                    break
+                }
+            }
+
+            val viewDetails = p0?.findViewById<RelativeLayout>(R.id.view_details)
+            when(p0) {
+                viewDetails -> clickHandler.viewDetails(aPosition)
+            }
+        }
+
+        init {
+            val viewDetails = binding.viewDetails
+            viewDetails.setOnClickListener(this)
         }
     }
 

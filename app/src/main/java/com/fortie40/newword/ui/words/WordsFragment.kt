@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
-class WordsFragment : Fragment() {
+class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
@@ -26,6 +27,10 @@ class WordsFragment : Fragment() {
     private lateinit var r: Runnable
 
     private var isInitialized: Boolean = false
+
+    private val allWords: List<WordModel>? by lazy {
+        viewModel.allProducts.value
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,13 +107,19 @@ class WordsFragment : Fragment() {
                     Timber.d("Word: ${word.wordLearned}")
                     Timber.d("***************************************************************")
                 }
-                wordAdapter = WordAdapter(words)
+                wordAdapter = WordAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
                 word_items.layoutManager = LinearLayoutManager(activity)
                 word_items.adapter = wordAdapter
                 swipe_to_refresh.isRefreshing = false
             }
         })
+    }
+
+    override fun viewDetails(clickedItemIndex: Int) {
+        val wordAtPosition = allWords?.get(clickedItemIndex)
+
+        Timber.d("${wordAtPosition?.wordLearned}")
     }
 
 }
