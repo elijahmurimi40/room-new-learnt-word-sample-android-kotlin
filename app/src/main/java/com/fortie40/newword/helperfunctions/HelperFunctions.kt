@@ -13,7 +13,7 @@ object HelperFunctions {
     }
 
     // first letter of any string to uppercase
-    fun capitalizeFirstWord(str: String): String {
+    fun capitalizeFirstLetter(str: String): String {
         if (str.isEmpty()) {
             return str
         }
