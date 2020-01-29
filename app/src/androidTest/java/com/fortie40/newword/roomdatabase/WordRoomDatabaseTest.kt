@@ -65,4 +65,25 @@ class WordRoomDatabaseTest {
         assertEquals(2, v[4].wordId)
         w.removeObserver {  }
     }
+
+    @Test
+    fun getOneWord() = runBlocking {
+        val words = listOf("elixir", "zopl", "kotlin", "angelScript", "smallTalk")
+        for (word in words) {
+            val wordModel = WordModel()
+            val wordLanguage = "Programming languages"
+            val wordMeaning = "Programming languages"
+
+            wordModel.wordLearned = word
+            wordModel.language = wordLanguage
+            wordModel.meaning = wordMeaning
+            wordDao.saveWord(wordModel)
+        }
+
+        for (i in 1..words.size) {
+            val position = i - 1
+            val wordModel = wordDao.getWord(i)
+            assertEquals(words[position], wordModel.wordLearned)
+        }
+    }
 }

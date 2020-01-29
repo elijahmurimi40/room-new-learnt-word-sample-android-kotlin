@@ -13,4 +13,7 @@ interface WordDao {
 
     @Query("SELECT * FROM words ORDER BY word_learned ASC")
     fun getAllWords(): LiveData<List<WordModel>>
+
+    @Query("SELECT * FROM words WHERE wordId = :id")
+    suspend fun getWord(id: Int): WordModel
 }
