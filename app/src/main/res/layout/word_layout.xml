@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="word"
+            name="wordM"
             type="com.fortie40.newword.roomdatabase.WordModel" />
     </data>
 
