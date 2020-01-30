@@ -16,4 +16,7 @@ interface WordDao {
 
     @Query("SELECT * FROM words WHERE wordId = :id")
     suspend fun getWord(id: Int): WordModel
+
+    @Query("DELETE FROM words WHERE wordId = :id")
+    suspend fun deleteWord(id: Int)
 }

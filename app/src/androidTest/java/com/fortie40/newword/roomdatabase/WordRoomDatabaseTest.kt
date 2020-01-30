@@ -71,6 +71,20 @@ class WordRoomDatabaseTest {
         }
     }
 
+    // delete word
+    @Test
+    fun deleteWord() = runBlocking {
+        insertWords()
+
+        wordDao.deleteWord(1)
+        wordDao.deleteWord(2)
+        val w = wordDao.getAllWords()
+        w.observeForever {  }
+        val v = w.value
+        assertEquals(3, v!!.size)
+        w.removeObserver {  }
+    }
+
     // insert words
     private fun insertWords() = runBlocking {
         for (word in words) {
