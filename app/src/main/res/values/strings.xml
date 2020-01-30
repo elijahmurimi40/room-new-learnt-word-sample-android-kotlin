@@ -19,4 +19,5 @@
     <string name="search">Search</string>
     <string name="no_words">No Words</string>
     <string name="search_anything">Search Anything</string>
+    <string name="delete">Delete</string>
 </resources>

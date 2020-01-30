@@ -2,10 +2,7 @@ package com.fortie40.newword.ui.addEditWords
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,6 +21,10 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class AddEditWordFragment : Fragment() {
+
+    companion object {
+        private const val ID: String = "fortie40"
+    }
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
@@ -85,9 +86,15 @@ class AddEditWordFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.add_edit_menu, menu)
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_search).isVisible = false
+        menu.findItem(R.id.action_delete).isVisible = id != ID
     }
 
     private fun validateWord(): Boolean {
@@ -141,12 +148,13 @@ class AddEditWordFragment : Fragment() {
     }
 
     private fun getWord(id: String) {
-        if (id == "fortie40") {
+        if (id == ID) {
             Timber.d(id)
         } else {
             Timber.d(id)
             val sum = id.toInt() + 1
             Timber.d("$sum")
         }
+        activity?.invalidateOptionsMenu()
     }
 }
