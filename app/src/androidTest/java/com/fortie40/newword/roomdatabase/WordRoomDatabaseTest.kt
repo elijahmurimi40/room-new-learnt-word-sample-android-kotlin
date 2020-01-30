@@ -20,12 +20,14 @@ class WordRoomDatabaseTest {
 
     private lateinit var db: WordRoomDatabase
     private lateinit var wordDao: WordDao
+    private lateinit var words: List<String>
 
     @Before
     fun setUp() {
         db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(),
             WordRoomDatabase::class.java).allowMainThreadQueries().build()
         wordDao = db.wordDao()
+        words = listOf("elixir", "zopl", "kotlin", "angelScript", "smallTalk")
     }
 
     @After
@@ -33,19 +35,10 @@ class WordRoomDatabaseTest {
         db.close()
     }
 
+    // insert and read words
     @Test
     fun insertAndReadWord() = runBlocking {
-        val words = listOf("elixir", "zopl", "kotlin", "angelScript", "smallTalk")
-        for (word in words) {
-            val wordModel = WordModel()
-            val wordLanguage = "Programming languages"
-            val wordMeaning = "Programming languages"
-
-            wordModel.wordLearned = word
-            wordModel.language = wordLanguage
-            wordModel.meaning = wordMeaning
-            wordDao.saveWord(wordModel)
-        }
+        insertWords()
 
         val w = wordDao.getAllWords()
         w.observeForever {  }
@@ -66,9 +59,20 @@ class WordRoomDatabaseTest {
         w.removeObserver {  }
     }
 
+    // test for getWord
     @Test
     fun getOneWord() = runBlocking {
-        val words = listOf("elixir", "zopl", "kotlin", "angelScript", "smallTalk")
+        insertWords()
+
+        for (i in 1..words.size) {
+            val position = i - 1
+            val wordModel = wordDao.getWord(i)
+            assertEquals(words[position], wordModel.wordLearned)
+        }
+    }
+
+    // insert words
+    private fun insertWords() = runBlocking {
         for (word in words) {
             val wordModel = WordModel()
             val wordLanguage = "Programming languages"
@@ -78,12 +82,6 @@ class WordRoomDatabaseTest {
             wordModel.language = wordLanguage
             wordModel.meaning = wordMeaning
             wordDao.saveWord(wordModel)
-        }
-
-        for (i in 1..words.size) {
-            val position = i - 1
-            val wordModel = wordDao.getWord(i)
-            assertEquals(words[position], wordModel.wordLearned)
         }
     }
 }
