@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
+import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperfunctions.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -97,6 +98,13 @@ class AddEditWordFragment : Fragment() {
         menu.findItem(R.id.action_delete).isVisible = id != ID
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_delete -> openDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun validateWord(): Boolean {
         return when {
             viewModel.word.value!!.isEmpty() -> {
@@ -156,5 +164,10 @@ class AddEditWordFragment : Fragment() {
             Timber.d("$sum")
         }
         activity?.invalidateOptionsMenu()
+    }
+
+    private fun openDialog() {
+        val deleteDialog = DeleteDialog()
+        deleteDialog.show(activity!!.supportFragmentManager, "Delete Dialog")
     }
 }
