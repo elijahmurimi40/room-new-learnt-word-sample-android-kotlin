@@ -21,27 +21,35 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class AddEditWordFragment : Fragment() {
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: AddEditWordViewModel
+    private lateinit var id: String
+    private lateinit var imm: InputMethodManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE)
+                as InputMethodManager
+
         // change toolbar title
         activity!!.title = getString(R.string.add_word)
         // back button
         activity!!.toolbar.setNavigationIcon(R.drawable.back_button)
         activity!!.toolbar.setNavigationOnClickListener {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE)
-                    as InputMethodManager
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             activity!!.onBackPressed()
         }
+
+        // get bundle
+        id = AddEditWordFragmentArgs.fromBundle(arguments!!).id
+        getWord(id)
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
         root = addEditWordFragmentBinding.root
@@ -51,6 +59,9 @@ class AddEditWordFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //close keyboard
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+
         viewModel = ViewModelProviders.of(this).get(AddEditWordViewModel::class.java)
         addEditWordFragmentBinding.apply {
             this.lifecycleOwner = this@AddEditWordFragment
@@ -126,6 +137,16 @@ class AddEditWordFragment : Fragment() {
             viewModel.word.value = ""
             viewModel.language.value = ""
             viewModel.meaning.value = ""
+        }
+    }
+
+    private fun getWord(id: String) {
+        if (id == "fortie40") {
+            Timber.d(id)
+        } else {
+            Timber.d(id)
+            val sum = id.toInt() + 1
+            Timber.d("$sum")
         }
     }
 }

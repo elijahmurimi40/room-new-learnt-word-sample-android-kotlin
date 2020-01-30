@@ -18,5 +18,10 @@
         android:id="@+id/addEditWordFragment"
         android:name="com.fortie40.newword.ui.addEditWords.AddEditWordFragment"
         android:label="@string/add_edit_words"
-        tools:layout="@layout/add_edit_word_fragment" />
+        tools:layout="@layout/add_edit_word_fragment" >
+        <argument
+            android:name="id"
+            app:argType="string"
+            android:defaultValue="fortie40" />
+    </fragment>
 </navigation>

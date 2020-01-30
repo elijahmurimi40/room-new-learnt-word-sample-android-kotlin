@@ -2,12 +2,16 @@ package com.fortie40.newword.ui.words
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
@@ -118,8 +122,12 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     override fun viewDetails(clickedItemIndex: Int) {
         val wordAtPosition = allWords?.get(clickedItemIndex)
-
         Timber.d("${wordAtPosition?.wordLearned}")
+
+        val action =
+            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
+        action.id = wordAtPosition!!.wordId.toString()
+        activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
     }
 
 }
