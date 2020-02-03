@@ -2,7 +2,9 @@ package com.fortie40.newword.ui.addEditWords
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -61,6 +63,12 @@ class AddEditWordFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //remove enter key on keyboard
+        word_edit_text.imeOptions = EditorInfo.IME_ACTION_DONE
+        word_edit_text.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        language_edit_text.imeOptions = EditorInfo.IME_ACTION_DONE
+        language_edit_text.setRawInputType(InputType.TYPE_CLASS_TEXT)
+
         //close keyboard
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
@@ -107,7 +115,7 @@ class AddEditWordFragment : Fragment() {
 
     private fun validateWord(): Boolean {
         return when {
-            viewModel.word.value!!.isEmpty() -> {
+            viewModel.word.value!!.trim().isEmpty() -> {
                 word.error = getString(R.string.field_is_required)
                 false
             }
@@ -120,7 +128,7 @@ class AddEditWordFragment : Fragment() {
 
     private fun validateLanguage(): Boolean {
         return when {
-            viewModel.language.value!!.isEmpty() -> {
+            viewModel.language.value!!.trim().isEmpty() -> {
                 language.error = getString(R.string.field_is_required)
                 false
             }
@@ -133,7 +141,7 @@ class AddEditWordFragment : Fragment() {
 
     private fun validateMeaning(): Boolean {
         return when {
-            viewModel.meaning.value!!.isEmpty() -> {
+            viewModel.meaning.value!!.trim().isEmpty() -> {
                 meaning.error = getString(R.string.field_is_required)
                 false
             }
