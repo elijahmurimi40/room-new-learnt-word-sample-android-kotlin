@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="wordM"
@@ -26,11 +27,27 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:background="@{wordM.iconColor}"
+                    android:text="@{wordM.wordIcon}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/word"
+                    tools:background="@drawable/circle"
+                    tools:text="@string/w" />
+
+                <TextView
                     android:id="@+id/word"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:ellipsize="end"
                     android:lines="1"
@@ -40,8 +57,9 @@
                     android:textSize="@dimen/msg_text_primary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/dummy_text" />
 
                 <TextView
                     android:id="@+id/language"
@@ -50,6 +68,7 @@
                     android:ellipsize="end"
                     android:lines="1"
                     android:text="@{wordM.languageC}"
+                    tools:text="@string/dummy_text"
                     android:textColor="@color/subject"
                     android:textSize="@dimen/msg_text_secondary"
                     android:textStyle="bold"
@@ -64,11 +83,26 @@
                     android:ellipsize="end"
                     android:lines="1"
                     android:text="@{wordM.meaningC}"
+                    tools:text="@string/dummy_text"
                     android:textColor="@color/message"
                     android:textSize="@dimen/msg_text_secondary"
                     app:layout_constraintEnd_toEndOf="@+id/language"
                     app:layout_constraintStart_toStartOf="@+id/language"
                     app:layout_constraintTop_toBottomOf="@+id/language" />
+
+                <view
+                    android:id="@+id/view"
+                    class="com.google.android.material.bottomappbar.BottomAppBar"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="invisible"
+                    app:backgroundTint="@android:color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/meaning" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,13 @@
 package com.fortie40.newword.roomdatabase
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.fortie40.newword.helperfunctions.HelperFunctions
+import kotlin.random.Random
 
 @Entity(tableName = "words")
 data class WordModel(
@@ -28,4 +31,23 @@ data class WordModel(
 
     @Ignore
     val meaningC: String = HelperFunctions.capitalizeFirstLetter(meaning)
+
+    @Ignore
+    val wordIcon: String = HelperFunctions.capitalizeFirstLetter(wordLearned[0].toString())
+
+    @Ignore
+    fun getRandomColor(): GradientDrawable {
+        val r = Random
+        val red = r.nextInt(150)
+        val green = r.nextInt(150)
+        val blue = r.nextInt(150)
+
+        val draw = GradientDrawable()
+        draw.shape = GradientDrawable.OVAL
+        draw.setColor(Color.rgb(red, green, blue))
+        return draw
+    }
+
+    @Ignore
+    val iconColor = getRandomColor()
 }
