@@ -26,4 +26,5 @@
     <string name="_1_word_will_be_permanently_deleted">1 word will be permanently deleted</string>
     <string name="cancel_dialog">Cancel</string>
     <string name="delete_dialog_">Delete</string>
+    <string name="update_word">Update Word</string>
 </resources>

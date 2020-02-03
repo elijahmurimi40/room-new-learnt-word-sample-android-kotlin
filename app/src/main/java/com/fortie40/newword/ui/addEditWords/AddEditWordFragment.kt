@@ -53,7 +53,6 @@ class AddEditWordFragment : Fragment() {
 
         // get bundle
         id = AddEditWordFragmentArgs.fromBundle(arguments!!).id
-        getWord(id)
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
         root = addEditWordFragmentBinding.root
@@ -78,6 +77,10 @@ class AddEditWordFragment : Fragment() {
             this.addEditWordViewModel = viewModel
         }
 
+        // display word if available
+        getWord(id)
+
+        // onclick
         save_word.setOnClickListener {
             if (!validateWord() or !validateLanguage() or !validateMeaning()) {
                 return@setOnClickListener
