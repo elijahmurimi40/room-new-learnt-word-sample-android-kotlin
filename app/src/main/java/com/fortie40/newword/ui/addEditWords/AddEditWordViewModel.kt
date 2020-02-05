@@ -15,4 +15,8 @@ class AddEditWordViewModel(application: Application) : AndroidViewModel(applicat
     suspend fun saveWord(wordModel: WordModel) {
         repository.saveWord(wordModel)
     }
+
+    suspend fun getWord(id: Int): WordModel {
+        return repository.getWord(id)
+    }
 }

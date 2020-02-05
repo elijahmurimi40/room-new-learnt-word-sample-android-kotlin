@@ -16,4 +16,8 @@ class AddEditWordRepository() {
     suspend fun saveWord(wordModel: WordModel) {
         wordDao.saveWord(wordModel)
     }
+
+    suspend fun getWord(id: Int): WordModel {
+        return wordDao.getWord(id)
+    }
 }

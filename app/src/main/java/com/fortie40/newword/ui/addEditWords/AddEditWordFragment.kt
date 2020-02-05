@@ -171,8 +171,16 @@ class AddEditWordFragment : Fragment() {
             Timber.d(id)
         } else {
             Timber.d(id)
-            val sum = id.toInt() + 1
-            Timber.d("$sum")
+            activity!!.title = getString(R.string.word_edit)
+            val idInt = id.toInt()
+            CoroutineScope(IO).launch {
+                val wm = viewModel.getWord(idInt)
+                withContext(Main) {
+                    viewModel.word.value = wm.wordLearnedC
+                    viewModel.language.value = wm.languageC
+                    viewModel.meaning.value = wm.meaningC
+                }
+            }
         }
         activity?.invalidateOptionsMenu()
     }
