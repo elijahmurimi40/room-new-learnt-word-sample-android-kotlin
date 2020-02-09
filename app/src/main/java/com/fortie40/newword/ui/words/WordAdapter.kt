@@ -1,5 +1,7 @@
 package com.fortie40.newword.ui.words
 
+import android.graphics.Color
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +17,25 @@ import com.fortie40.newword.databinding.WordLayoutBinding
 import com.fortie40.newword.helperfunctions.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 
+
 class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiffCallBack()),
     Filterable {
 
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
     private lateinit var clickHandler: WordItemClickListener
+    private lateinit var selectedItems: SparseBooleanArray
 
     constructor(listener: WordItemClickListener, wordList: List<WordModel>): this() {
         clickHandler = listener
         wOriginalList = wordList
         wFilteredList = wordList
+        selectedItems = SparseBooleanArray()
     }
 
     interface WordItemClickListener {
-        fun viewDetails(clickedItemIndex: Int)
+        fun onWordClicked(clickedItemIndex: Int)
+        fun onWordLongClicked(clickedItemIndex: Int): Boolean
     }
 
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
@@ -45,32 +51,51 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
     }
 
     inner class WordViewHolder(private val binding: WordLayoutBinding):
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
 
         fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
             binding.executePendingBindings()
         }
 
-        override fun onClick(p0: View?) {
-            var aPosition = adapterPosition
-            val word = wFilteredList[aPosition].wordLearned
+        private fun wordAdapterPosition(): Int {
+            var position = adapterPosition
+            val word = wFilteredList[position].wordLearned
             for (i in wOriginalList.indices) {
                 if (word == wOriginalList[i].wordLearned) {
-                    aPosition = i
+                    position = i
                     break
                 }
             }
+            return position
+        }
+
+        override fun onClick(p0: View?) {
+            val aPosition = wordAdapterPosition()
 
             val viewDetails = p0?.findViewById<RelativeLayout>(R.id.view_details)
             when(p0) {
-                viewDetails -> clickHandler.viewDetails(aPosition)
+                viewDetails -> clickHandler.onWordClicked(aPosition)
             }
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            val aPosition = wordAdapterPosition()
+
+            val viewDetails = p0?.findViewById<RelativeLayout>(R.id.view_details)
+            when(p0) {
+                viewDetails -> {
+                    clickHandler.onWordLongClicked(aPosition)
+                    viewDetails?.setBackgroundColor(Color.RED)
+                }
+            }
+            return true
         }
 
         init {
             val viewDetails = binding.viewDetails
             viewDetails.setOnClickListener(this)
+            viewDetails.setOnLongClickListener(this)
         }
     }
 
@@ -110,5 +135,29 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
                 submitList(p1?.values as List<WordModel>)
             }
         }
+    }
+
+    private fun getSelectedItems(): ArrayList<Int> {
+        val items: ArrayList<Int> = ArrayList(selectedItems.size())
+        for (i in 0 until selectedItems.size()) {
+            items.add(selectedItems.keyAt(i))
+        }
+        return items
+    }
+
+    fun getSelectedItemCount(): Int {
+        return getSelectedItems().size
+    }
+
+    fun toggleSelection(position: Int) {
+        if (selectedItems.get(position, false)) {
+            selectedItems.delete(position)
+        } else {
+            selectedItems.put(position, true)
+        }
+    }
+
+    fun isSelected(position: Int): Boolean {
+        return getSelectedItems().contains(position)
     }
 }

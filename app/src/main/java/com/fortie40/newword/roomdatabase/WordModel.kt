@@ -33,7 +33,11 @@ data class WordModel(
     val meaningC: String = HelperFunctions.capitalizeFirstLetter(meaning)
 
     @Ignore
-    val wordIcon: String = HelperFunctions.capitalizeFirstLetter(wordLearned[0].toString())
+    val wordIcon: String = if (wordLearned != "") {
+        HelperFunctions.capitalizeFirstLetter(wordLearned[0].toString())
+    } else {
+        "F"
+    }
 
     @Ignore
     fun getRandomColor(): GradientDrawable {

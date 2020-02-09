@@ -89,7 +89,7 @@ class AddEditWordFragment : Fragment() {
             val wordModel = WordModel()
             wordModel.wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
             wordModel.language = HelperFunctions.toLowerCase(viewModel.language.value!!)
-            wordModel.meaning = HelperFunctions.toLowerCase(viewModel.language.value!!)
+            wordModel.meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
 
             CoroutineScope(IO).launch {
                 viewModel.saveWord(wordModel)
