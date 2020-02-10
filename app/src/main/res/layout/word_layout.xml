@@ -11,12 +11,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="1dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:background="@android:color/white"
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/view_details"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/background_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,19 +30,19 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
+                    android:background="@{wordM.iconColor}"
                     android:gravity="center"
+                    android:text="@{wordM.wordIcon}"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:background="@{wordM.iconColor}"
-                    android:text="@{wordM.wordIcon}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/word"
                     tools:background="@drawable/circle"
@@ -69,13 +74,13 @@
                     android:ellipsize="end"
                     android:lines="1"
                     android:text="@{wordM.languageC}"
-                    tools:text="@string/dummy_text"
                     android:textColor="@color/subject"
                     android:textSize="@dimen/msg_text_secondary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/word"
                     app:layout_constraintStart_toStartOf="@+id/word"
-                    app:layout_constraintTop_toBottomOf="@+id/word" />
+                    app:layout_constraintTop_toBottomOf="@+id/word"
+                    tools:text="@string/dummy_text" />
 
                 <TextView
                     android:id="@+id/meaning"
@@ -84,12 +89,12 @@
                     android:ellipsize="end"
                     android:lines="1"
                     android:text="@{wordM.meaningC}"
-                    tools:text="@string/dummy_text"
                     android:textColor="@color/message"
                     android:textSize="@dimen/msg_text_secondary"
                     app:layout_constraintEnd_toEndOf="@+id/language"
                     app:layout_constraintStart_toStartOf="@+id/language"
-                    app:layout_constraintTop_toBottomOf="@+id/language" />
+                    app:layout_constraintTop_toBottomOf="@+id/language"
+                    tools:text="@string/dummy_text" />
 
                 <view
                     android:id="@+id/view"
