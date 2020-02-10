@@ -35,7 +35,7 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     interface WordItemClickListener {
         fun onWordClicked(clickedItemIndex: Int)
-        fun onWordLongClicked(clickedItemIndex: Int): Boolean
+        fun onWordLongClicked(clickedItemIndex: Int)
     }
 
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
@@ -52,6 +52,8 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     inner class WordViewHolder(private val binding: WordLayoutBinding):
         RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
+
+        val viewDetails: RelativeLayout = binding.viewDetails
 
         fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
@@ -73,7 +75,6 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         override fun onClick(p0: View?) {
             val aPosition = wordAdapterPosition()
 
-            val viewDetails = p0?.findViewById<RelativeLayout>(R.id.view_details)
             when(p0) {
                 viewDetails -> clickHandler.onWordClicked(aPosition)
             }
@@ -82,12 +83,8 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         override fun onLongClick(p0: View?): Boolean {
             val aPosition = wordAdapterPosition()
 
-            val viewDetails = p0?.findViewById<RelativeLayout>(R.id.view_details)
             when(p0) {
-                viewDetails -> {
-                    clickHandler.onWordLongClicked(aPosition)
-                    viewDetails?.setBackgroundColor(Color.RED)
-                }
+                viewDetails -> clickHandler.onWordLongClicked(aPosition)
             }
             return true
         }
@@ -108,6 +105,10 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.bind(getItem(position))
+        when(isSelected(position)) {
+            true -> holder.viewDetails.setBackgroundColor(Color.LTGRAY)
+            else -> holder.viewDetails.setBackgroundColor(Color.WHITE)
+        }
     }
 
     override fun getFilter(): Filter {
@@ -155,9 +156,18 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         } else {
             selectedItems.put(position, true)
         }
+        notifyItemChanged(position)
     }
 
-    fun isSelected(position: Int): Boolean {
+    private fun isSelected(position: Int): Boolean {
         return getSelectedItems().contains(position)
+    }
+
+    fun clearSelection() {
+        val selection:List<Int> = getSelectedItems()
+        selectedItems.clear()
+        for (i in selection) {
+            notifyItemChanged(i)
+        }
     }
 }

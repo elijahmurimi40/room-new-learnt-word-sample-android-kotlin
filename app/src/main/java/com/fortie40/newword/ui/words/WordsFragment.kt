@@ -143,7 +143,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
     }
 
-    override fun onWordLongClicked(clickedItemIndex: Int): Boolean {
+    override fun onWordLongClicked(clickedItemIndex: Int) {
         Timber.d("$clickedItemIndex")
         val wordAtPosition = allWords?.get(clickedItemIndex)
         Timber.d("${wordAtPosition?.wordLearned}")
@@ -151,7 +151,6 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
             actionMode = activity!!.startActionMode(ActionModeCallback())
         }
         toggleSelection(clickedItemIndex)
-        return true
     }
 
     inner class ActionModeCallback : ActionMode.Callback {
@@ -176,6 +175,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         }
 
         override fun onDestroyActionMode(p0: ActionMode?) {
+            wordAdapter.clearSelection()
             actionMode = null
         }
 
