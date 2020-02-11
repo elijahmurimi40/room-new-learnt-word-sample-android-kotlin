@@ -30,7 +30,8 @@ class DeleteDialog(): AppCompatDialogFragment() {
                 dialogContent.text = getString(R.string._1_word_will_be_permanently_deleted)
             } else {
                 dialogTitle.text = getString(R.string.delete_words)
-                dialogContent.text = ""
+                dialogContent.text = getString(R.string.words_will_be_permanently_deleted,
+                    numberOfItems.toString())
             }
 
             builder.setView(view)

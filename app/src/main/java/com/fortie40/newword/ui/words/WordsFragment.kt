@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
+import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperfunctions.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +31,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
+    private var numberOfItems: Int = 0
 
     private val allWords: List<WordModel>? by lazy {
         viewModel.allProducts.value
@@ -130,7 +132,13 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         } else {
             actionMode?.title = count.toString()
             actionMode?.invalidate()
+            numberOfItems = count
         }
+    }
+
+    private fun openDialog(itemNumber: Int) {
+        val deleteDialog = DeleteDialog(itemNumber)
+        deleteDialog.show(activity!!.supportFragmentManager, "Delete Dialog")
     }
 
     override fun onWordClicked(clickedItemIndex: Int) {
@@ -158,6 +166,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
             return when(p1?.itemId) {
                 R.id.action_delete -> {
                     Timber.d("Selected")
+                    openDialog(numberOfItems)
                     p0?.finish()
                     true
                 }
