@@ -142,13 +142,17 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
     }
 
     override fun onWordClicked(clickedItemIndex: Int) {
-        val wordAtPosition = allWords?.get(clickedItemIndex)
-        Timber.d("${wordAtPosition?.wordLearned}")
+        if (actionMode != null) {
+            toggleSelection(clickedItemIndex)
+        } else {
+            val wordAtPosition = allWords?.get(clickedItemIndex)
+            Timber.d("${wordAtPosition?.wordLearned}")
 
-        val action =
-            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
-        action.id = wordAtPosition!!.wordId.toString()
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
+            val action =
+                WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
+            action.id = wordAtPosition!!.wordId.toString()
+            activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
+        }
     }
 
     override fun onWordLongClicked(clickedItemIndex: Int) {
