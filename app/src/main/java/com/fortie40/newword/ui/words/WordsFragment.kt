@@ -167,7 +167,6 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
                 R.id.action_delete -> {
                     Timber.d("Selected")
                     openDialog(numberOfItems)
-                    p0?.finish()
                     true
                 }
                 else -> false
