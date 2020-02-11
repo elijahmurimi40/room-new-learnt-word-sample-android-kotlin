@@ -30,6 +30,7 @@
     <!-- dialog layout -->
     <string name="delete_dialog">Delete Dialog</string>
     <string name="delete_word">Delete Word?</string>
+    <string name="delete_words">Delete Words?</string>
     <string name="_1_word_will_be_permanently_deleted">1 word will be permanently deleted</string>
 
     <!-- word layout -->
