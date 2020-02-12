@@ -90,7 +90,6 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         }
 
         init {
-            val viewDetails = binding.viewDetails
             viewDetails.setOnClickListener(this)
             viewDetails.setOnLongClickListener(this)
         }
