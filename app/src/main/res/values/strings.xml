@@ -46,6 +46,7 @@
     <string name="field_is_required">Field is required</string>
     <string name="successfully_added">Successfully Added</string>
     <string name="word_edit">Word Edit</string>
+    <string name="update_word">Update Word</string>
 
     <!-- delete dialog class -->
     <string name="cancel_dialog">Cancel</string>

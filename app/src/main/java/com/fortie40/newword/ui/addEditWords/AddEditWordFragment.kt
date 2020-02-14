@@ -35,6 +35,8 @@ class AddEditWordFragment : Fragment() {
     private lateinit var id: String
     private lateinit var imm: InputMethodManager
 
+    private var isUpdating: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,16 +86,11 @@ class AddEditWordFragment : Fragment() {
         save_word.setOnClickListener {
             if (!validateWord() or !validateLanguage() or !validateMeaning()) {
                 return@setOnClickListener
-            }
-
-            val wordModel = WordModel()
-            wordModel.wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
-            wordModel.language = HelperFunctions.toLowerCase(viewModel.language.value!!)
-            wordModel.meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
-
-            CoroutineScope(IO).launch {
-                viewModel.saveWord(wordModel)
-                showToast()
+            } else {
+                when(isUpdating) {
+                    true -> Timber.d("up")
+                    else -> insertWord()
+                }
             }
         }
     }
@@ -114,6 +111,18 @@ class AddEditWordFragment : Fragment() {
             R.id.action_delete -> openDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun insertWord() {
+        val wordModel = WordModel()
+        wordModel.wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
+        wordModel.language = HelperFunctions.toLowerCase(viewModel.language.value!!)
+        wordModel.meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
+
+        CoroutineScope(IO).launch {
+            viewModel.saveWord(wordModel)
+            showToast()
+        }
     }
 
     private fun validateWord(): Boolean {
@@ -171,6 +180,8 @@ class AddEditWordFragment : Fragment() {
             Timber.d(id)
         } else {
             Timber.d(id)
+            isUpdating = true
+            save_word.text = getString(R.string.update_word)
             activity!!.title = getString(R.string.word_edit)
             val idInt = id.toInt()
             CoroutineScope(IO).launch {
