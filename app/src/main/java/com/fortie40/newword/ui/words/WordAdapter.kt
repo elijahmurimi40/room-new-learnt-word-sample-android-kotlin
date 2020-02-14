@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -54,6 +55,7 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
 
         val viewDetails: RelativeLayout = binding.viewDetails
+        val icon: TextView = binding.icon
 
         fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
@@ -104,8 +106,14 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.bind(getItem(position))
+        val context = holder.viewDetails.context
+
         when(isSelected(position)) {
-            true -> holder.viewDetails.setBackgroundColor(Color.LTGRAY)
+            true -> {
+                holder.viewDetails.setBackgroundColor(Color.LTGRAY)
+                holder.icon.text = ""
+                holder.icon.background = context.getDrawable(R.drawable.circle_icon)
+            }
             else -> holder.viewDetails.setBackgroundColor(Color.WHITE)
         }
     }
