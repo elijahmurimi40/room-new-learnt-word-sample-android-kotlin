@@ -6,7 +6,6 @@ import android.text.InputType
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.R
@@ -87,10 +86,7 @@ class AddEditWordFragment : Fragment() {
             if (!validateWord() or !validateLanguage() or !validateMeaning()) {
                 return@setOnClickListener
             } else {
-                when(isUpdating) {
-                    true -> Timber.d("up")
-                    else -> insertWord()
-                }
+                insertUpdateWord()
             }
         }
     }
@@ -113,15 +109,28 @@ class AddEditWordFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun insertWord() {
+    private fun insertUpdateWord() {
         val wordModel = WordModel()
-        wordModel.wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
-        wordModel.language = HelperFunctions.toLowerCase(viewModel.language.value!!)
-        wordModel.meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
+        val wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
+        val language = HelperFunctions.toLowerCase(viewModel.language.value!!)
+        val meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
 
-        CoroutineScope(IO).launch {
-            viewModel.saveWord(wordModel)
-            showToast()
+        wordModel.wordLearned = wordLearned
+        wordModel.language = language
+        wordModel.meaning = meaning
+
+        if (isUpdating) {
+            CoroutineScope(IO).launch {
+                viewModel.updateWord(wordLearned, language, meaning, id.toInt())
+                withContext(Main) {
+                    HelperFunctions.showShortToast(view!!.context, "Updated Successfully")
+                }
+            }
+        } else {
+            CoroutineScope(IO).launch {
+                viewModel.saveWord(wordModel)
+                emptyInputs()
+            }
         }
     }
 
@@ -164,10 +173,9 @@ class AddEditWordFragment : Fragment() {
         }
     }
 
-    private suspend fun showToast() {
+    private suspend fun emptyInputs() {
         withContext(Main) {
-            Toast.makeText(view!!.context, getString(R.string.successfully_added),
-                Toast.LENGTH_SHORT).show()
+            HelperFunctions.showShortToast(view!!.context, getString(R.string.successfully_added))
             scroll_view.fullScroll(View.FOCUS_UP)
             viewModel.word.value = ""
             viewModel.language.value = ""

@@ -19,4 +19,8 @@ class AddEditWordViewModel(application: Application) : AndroidViewModel(applicat
     suspend fun getWord(id: Int): WordModel {
         return repository.getWord(id)
     }
+
+    suspend fun updateWord(wordLearned: String, language: String, meaning: String, id: Int) {
+        repository.updateWord(wordLearned, language, meaning, id)
+    }
 }

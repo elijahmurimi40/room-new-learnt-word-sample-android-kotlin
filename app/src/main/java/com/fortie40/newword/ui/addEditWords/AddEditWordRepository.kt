@@ -20,4 +20,8 @@ class AddEditWordRepository() {
     suspend fun getWord(id: Int): WordModel {
         return wordDao.getWord(id)
     }
+
+    suspend fun updateWord(wordLearned: String, language: String, meaning: String, id: Int) {
+        wordDao.updateWord(wordLearned, language, meaning, id)
+    }
 }
