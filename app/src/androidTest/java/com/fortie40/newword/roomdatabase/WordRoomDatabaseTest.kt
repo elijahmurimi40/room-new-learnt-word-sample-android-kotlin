@@ -85,6 +85,26 @@ class WordRoomDatabaseTest {
         w.removeObserver {  }
     }
 
+    // update word
+    @Test
+    fun updateWord() = runBlocking {
+        insertWords()
+
+        for (i in 1..words.size) {
+            val word = "word$i"
+            val language = "language$i"
+            val meaning = "meaning$i"
+
+            wordDao.updateWord(word, language, meaning, i)
+        }
+        val wordModel1 = wordDao.getWord(1)
+        val wordModel3 = wordDao.getWord(3)
+        val wordModel4 = wordDao.getWord(4)
+        assertEquals("word1", wordModel1.wordLearned)
+        assertEquals("language3", wordModel3.language)
+        assertEquals("meaning4", wordModel4.meaning)
+    }
+
     // insert words
     private fun insertWords() = runBlocking {
         for (word in words) {
