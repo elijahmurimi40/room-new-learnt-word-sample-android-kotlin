@@ -34,7 +34,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
     private var numberOfItems: Int = 0
 
     private val allWords: List<WordModel>? by lazy {
-        viewModel.allProducts.value
+        viewModel.allWords.value
     }
 
     override fun onCreateView(
@@ -102,7 +102,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     private fun getWords() {
         swipe_to_refresh.isRefreshing = true
-        viewModel.allProducts.observe(viewLifecycleOwner, Observer { words ->
+        viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
             if (words.isEmpty()) {
                 no_words.visibility = View.VISIBLE
                 swipe_to_refresh.isRefreshing = false
