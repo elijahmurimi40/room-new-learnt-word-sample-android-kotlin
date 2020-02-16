@@ -17,12 +17,13 @@
 
             <TextView
                 android:id="@+id/no_words"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/no_words"
+                android:gravity="center"
                 android:text="@string/no_words"
                 android:textSize="18sp"
                 android:visibility="gone"

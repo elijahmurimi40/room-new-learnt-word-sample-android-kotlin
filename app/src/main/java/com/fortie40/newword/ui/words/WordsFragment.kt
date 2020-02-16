@@ -82,12 +82,22 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
             }
 
             override fun onQueryTextChange(p0: String): Boolean {
-                wordAdapter.filter.filter(HelperFunctions.toLowerCase(p0))
-                isInitialized = true
-                handler = Handler()
-                r = Runnable { word_items.scrollToPosition(0) }
-                handler.postDelayed(r, 300)
-                return false
+                return if (!::wordAdapter.isInitialized) {
+                    Timber.d("blank")
+                    no_words.visibility = View.VISIBLE
+                    when(p0) {
+                        "" -> no_words.text = getString(R.string.no_words)
+                        else -> no_words.text = getString(R.string.no_results_found, p0)
+                    }
+                    false
+                } else {
+                    wordAdapter.filter.filter(HelperFunctions.toLowerCase(p0))
+                    isInitialized = true
+                    handler = Handler()
+                    r = Runnable { word_items.scrollToPosition(0) }
+                    handler.postDelayed(r, 300)
+                    false
+                }
             }
 
         })
