@@ -3,7 +3,6 @@ package com.fortie40.newword.dialogs
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
@@ -19,7 +18,7 @@ class DeleteDialog(): AppCompatDialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
-            val builder = AlertDialog.Builder(ContextThemeWrapper(activity, R.style.Dialog))
+            val builder = AlertDialog.Builder(activity!!)
             val inflater = it!!.layoutInflater
             val view = inflater.inflate(R.layout.dialog_layout, null)
 
