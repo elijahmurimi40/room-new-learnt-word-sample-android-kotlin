@@ -10,7 +10,7 @@ import com.fortie40.newword.R
 import timber.log.Timber
 
 class DeleteDialog(): AppCompatDialogFragment() {
-    private var numberOfItems: Int = 0
+    private var numberOfItems: Int = 1
     constructor(itemNumber: Int): this() {
         numberOfItems = itemNumber
     }
