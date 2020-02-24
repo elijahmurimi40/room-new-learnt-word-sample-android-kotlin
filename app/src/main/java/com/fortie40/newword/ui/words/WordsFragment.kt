@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.SearchView
-import android.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
@@ -126,7 +124,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
                 }
                 wordAdapter = WordAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
-                word_items.layoutManager = LinearLayoutManager(activity)
+                //word_items.layoutManager = LinearLayoutManager(activity)
                 word_items.adapter = wordAdapter
                 swipe_to_refresh.isRefreshing = false
             }

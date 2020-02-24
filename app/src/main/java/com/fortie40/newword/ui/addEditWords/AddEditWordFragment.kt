@@ -74,7 +74,7 @@ class AddEditWordFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(AddEditWordViewModel::class.java)
         addEditWordFragmentBinding.apply {
-            this.lifecycleOwner = this@AddEditWordFragment
+            this.lifecycleOwner = viewLifecycleOwner
             this.addEditWordViewModel = viewModel
         }
 
