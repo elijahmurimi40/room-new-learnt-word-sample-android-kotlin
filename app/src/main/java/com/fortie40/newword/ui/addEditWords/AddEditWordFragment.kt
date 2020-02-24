@@ -7,12 +7,12 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperfunctions.HelperFunctions
-import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -20,21 +20,18 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class AddEditWordFragment : Fragment() {
 
     companion object {
-        private const val ID: String = "fortie40"
+        private const val WORD_ID: String = "fortie40"
     }
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: AddEditWordViewModel
-    private lateinit var id: String
+    private lateinit var wordId: String
     private lateinit var imm: InputMethodManager
-
-    private var isUpdating: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +50,7 @@ class AddEditWordFragment : Fragment() {
         }
 
         // get bundle
-        id = AddEditWordFragmentArgs.fromBundle(arguments!!).id
+        wordId = AddEditWordFragmentArgs.fromBundle(arguments!!).id
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
         root = addEditWordFragmentBinding.root
@@ -78,17 +75,25 @@ class AddEditWordFragment : Fragment() {
             this.addEditWordViewModel = viewModel
         }
 
-        // display word if available
-        getWord(id)
-
-        // onclick
-        save_word.setOnClickListener {
-            if (!validateWord() or !validateLanguage() or !validateMeaning()) {
-                return@setOnClickListener
-            } else {
-                insertUpdateWord()
+        // show added toast
+        viewModel.isSuccessfullyAdded.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                HelperFunctions.showShortToast(view!!.context, getString(R.string.successfully_added))
+                scroll_view.fullScroll(View.FOCUS_UP)
+                viewModel.isSuccessfullyAdded.value = false
             }
-        }
+        })
+
+        // show toast for successfully updated
+        viewModel.isSuccessfullyUpdated.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                HelperFunctions.showShortToast(view!!.context, "Updated Successfully")
+                viewModel.isSuccessfullyUpdated.value = false
+            }
+        })
+
+        // display word if available
+        getWord()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -99,101 +104,29 @@ class AddEditWordFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_search).isVisible = false
-        menu.findItem(R.id.action_delete).isVisible = id != ID
+        menu.findItem(R.id.action_delete).isVisible = wordId != WORD_ID
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_delete -> openDialog()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun insertUpdateWord() {
-        val wordModel = WordModel()
-        val wordLearned = HelperFunctions.toLowerCase(viewModel.word.value!!)
-        val language = HelperFunctions.toLowerCase(viewModel.language.value!!)
-        val meaning = HelperFunctions.toLowerCase(viewModel.meaning.value!!)
-
-        wordModel.wordLearned = wordLearned
-        wordModel.language = language
-        wordModel.meaning = meaning
-
-        if (isUpdating) {
-            CoroutineScope(IO).launch {
-                viewModel.updateWord(wordLearned, language, meaning, id.toInt())
-                withContext(Main) {
-                    HelperFunctions.showShortToast(view!!.context, "Updated Successfully")
-                }
-            }
+    private fun getWord() {
+        if (wordId == WORD_ID) {
+            viewModel.isUpdatingWord.value = false
         } else {
-            CoroutineScope(IO).launch {
-                viewModel.saveWord(wordModel)
-                emptyInputs()
-            }
-        }
-    }
-
-    private fun validateWord(): Boolean {
-        return when {
-            viewModel.word.value!!.trim().isEmpty() -> {
-                word.error = getString(R.string.field_is_required)
-                false
-            }
-            else -> {
-                word.error = null
-                true
-            }
-        }
-    }
-
-    private fun validateLanguage(): Boolean {
-        return when {
-            viewModel.language.value!!.trim().isEmpty() -> {
-                language.error = getString(R.string.field_is_required)
-                false
-            }
-            else -> {
-                language.error = null
-                true
-            }
-        }
-    }
-
-    private fun validateMeaning(): Boolean {
-        return when {
-            viewModel.meaning.value!!.trim().isEmpty() -> {
-                meaning.error = getString(R.string.field_is_required)
-                false
-            }
-            else -> {
-                meaning.error = null
-                true
-            }
-        }
-    }
-
-    private suspend fun emptyInputs() {
-        withContext(Main) {
-            HelperFunctions.showShortToast(view!!.context, getString(R.string.successfully_added))
-            scroll_view.fullScroll(View.FOCUS_UP)
-            viewModel.word.value = ""
-            viewModel.language.value = ""
-            viewModel.meaning.value = ""
-        }
-    }
-
-    private fun getWord(id: String) {
-        if (id == ID) {
-            Timber.d(id)
-        } else {
-            Timber.d(id)
-            isUpdating = true
+            val wordIdInt = wordId.toInt()
+            viewModel.wordId.value = wordIdInt
+            viewModel.isUpdatingWord.value = true
             save_word.text = getString(R.string.update_word)
             activity!!.title = getString(R.string.word_edit)
-            val idInt = id.toInt()
+            activity?.invalidateOptionsMenu()
+
             CoroutineScope(IO).launch {
-                val wm = viewModel.getWord(idInt)
+                val wm = viewModel.getWord(wordIdInt)
                 withContext(Main) {
                     viewModel.word.value = wm.wordLearnedC
                     viewModel.language.value = wm.languageC
@@ -201,7 +134,6 @@ class AddEditWordFragment : Fragment() {
                 }
             }
         }
-        activity?.invalidateOptionsMenu()
     }
 
     private fun openDialog() {
