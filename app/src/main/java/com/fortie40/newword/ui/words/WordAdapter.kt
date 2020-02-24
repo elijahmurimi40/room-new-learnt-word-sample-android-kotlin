@@ -39,6 +39,27 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         fun onWordLongClicked(clickedItemIndex: Int)
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val wordLayoutBinding: WordLayoutBinding = DataBindingUtil.inflate(layoutInflater,
+            R.layout.word_layout, parent, false)
+        return WordViewHolder(wordLayoutBinding)
+    }
+
+    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+        holder.bind(getItem(position))
+        val context = holder.viewDetails.context
+
+        when(isSelected(position)) {
+            true -> {
+                holder.viewDetails.setBackgroundColor(Color.LTGRAY)
+                holder.icon.text = ""
+                holder.icon.background = context.getDrawable(R.drawable.circle_icon)
+            }
+            else -> holder.viewDetails.setBackgroundColor(Color.WHITE)
+        }
+    }
+
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
         override fun areItemsTheSame(oldItem: WordModel, newItem: WordModel): Boolean {
             return oldItem.wordId == newItem.wordId
@@ -94,27 +115,6 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         init {
             viewDetails.setOnClickListener(this)
             viewDetails.setOnLongClickListener(this)
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val wordLayoutBinding: WordLayoutBinding = DataBindingUtil.inflate(layoutInflater,
-            R.layout.word_layout, parent, false)
-        return WordViewHolder(wordLayoutBinding)
-    }
-
-    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        val context = holder.viewDetails.context
-
-        when(isSelected(position)) {
-            true -> {
-                holder.viewDetails.setBackgroundColor(Color.LTGRAY)
-                holder.icon.text = ""
-                holder.icon.background = context.getDrawable(R.drawable.circle_icon)
-            }
-            else -> holder.viewDetails.setBackgroundColor(Color.WHITE)
         }
     }
 
