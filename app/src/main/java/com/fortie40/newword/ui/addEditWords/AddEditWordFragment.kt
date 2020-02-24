@@ -50,7 +50,7 @@ class AddEditWordFragment : Fragment() {
         }
 
         // get bundle
-        wordId = AddEditWordFragmentArgs.fromBundle(arguments!!).id
+        wordId = AddEditWordFragmentArgs.fromBundle(arguments!!).wordId
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
         root = addEditWordFragmentBinding.root

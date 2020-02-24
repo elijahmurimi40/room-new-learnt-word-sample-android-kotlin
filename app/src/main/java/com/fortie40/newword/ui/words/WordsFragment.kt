@@ -158,7 +158,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
             val action =
                 WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
-            action.id = wordAtPosition!!.wordId.toString()
+            action.wordId = wordAtPosition!!.wordId.toString()
             activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
         }
     }

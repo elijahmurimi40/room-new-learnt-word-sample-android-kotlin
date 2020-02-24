@@ -20,7 +20,7 @@
         android:label="@string/add_edit_words"
         tools:layout="@layout/add_edit_word_fragment" >
         <argument
-            android:name="id"
+            android:name="wordId"
             app:argType="string"
             android:defaultValue="fortie40" />
     </fragment>
