@@ -146,7 +146,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     private fun openDialog(itemNumber: Int) {
         val deleteDialog = DeleteDialog(itemNumber)
-        deleteDialog.show(activity!!.supportFragmentManager, "Delete Dialog")
+        deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 
     override fun onWordClicked(clickedItemIndex: Int) {
