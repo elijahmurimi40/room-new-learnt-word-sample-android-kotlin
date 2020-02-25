@@ -137,7 +137,7 @@ class AddEditWordFragment : Fragment() {
     }
 
     private fun openDialog() {
-        val deleteDialog = DeleteDialog(1)
+        val deleteDialog = DeleteDialog()
         deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 }

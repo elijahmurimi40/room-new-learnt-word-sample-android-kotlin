@@ -144,8 +144,8 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         }
     }
 
-    private fun openDialog(itemNumber: Int) {
-        val deleteDialog = DeleteDialog(itemNumber)
+    private fun openDialog() {
+        val deleteDialog = DeleteDialog()
         deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 
@@ -178,7 +178,7 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
             return when(p1?.itemId) {
                 R.id.action_delete -> {
                     Timber.d("Selected")
-                    openDialog(numberOfItems)
+                    openDialog()
                     true
                 }
                 else -> false

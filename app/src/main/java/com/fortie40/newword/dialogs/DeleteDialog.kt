@@ -9,11 +9,8 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.fortie40.newword.R
 import timber.log.Timber
 
-class DeleteDialog(): AppCompatDialogFragment() {
+class DeleteDialog: AppCompatDialogFragment() {
     private var numberOfItems: Int = 1
-    constructor(itemNumber: Int): this() {
-        numberOfItems = itemNumber
-    }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
