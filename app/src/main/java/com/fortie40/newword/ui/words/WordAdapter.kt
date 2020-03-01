@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordLayoutBinding
 import com.fortie40.newword.helperclasses.HelperFunctions
+import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.roomdatabase.WordModel
 
 
@@ -24,19 +23,14 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
-    private lateinit var clickHandler: WordItemClickListener
+    private lateinit var clickHandler: IClickListener
     private lateinit var selectedItems: SparseBooleanArray
 
-    constructor(listener: WordItemClickListener, wordList: List<WordModel>): this() {
+    constructor(listener: IClickListener, wordList: List<WordModel>): this() {
         clickHandler = listener
         wOriginalList = wordList
         wFilteredList = wordList
         selectedItems = SparseBooleanArray()
-    }
-
-    interface WordItemClickListener {
-        fun onWordClicked(clickedItemIndex: Int)
-        fun onWordLongClicked(clickedItemIndex: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -48,15 +42,16 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.bind(getItem(position))
-        val context = holder.viewDetails.context
+        val context = holder.binding.viewDetails.context
+        holder.binding.iClickListener = clickHandler
 
         when(isSelected(position)) {
             true -> {
-                holder.viewDetails.setBackgroundColor(Color.LTGRAY)
-                holder.icon.text = ""
-                holder.icon.background = context.getDrawable(R.drawable.circle_icon)
+                holder.binding.viewDetails.setBackgroundColor(Color.LTGRAY)
+                holder.binding.icon.text = ""
+                holder.binding.icon.background = context.getDrawable(R.drawable.circle_icon)
             }
-            else -> holder.viewDetails.setBackgroundColor(Color.WHITE)
+            else -> holder.binding.viewDetails.setBackgroundColor(Color.WHITE)
         }
     }
 
@@ -72,49 +67,23 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
         }
     }
 
-    inner class WordViewHolder(private val binding: WordLayoutBinding):
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
-
-        val viewDetails: RelativeLayout = binding.viewDetails
-        val icon: TextView = binding.icon
+    inner class WordViewHolder(val binding: WordLayoutBinding):
+        RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
 
         fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
             binding.executePendingBindings()
         }
 
-        private fun wordAdapterPosition(): Int {
-            var position = adapterPosition
-            val word = wFilteredList[position].wordLearned
-            for (i in wOriginalList.indices) {
-                if (word == wOriginalList[i].wordLearned) {
-                    position = i
-                    break
-                }
-            }
-            return position
-        }
-
-        override fun onClick(p0: View?) {
-            val aPosition = wordAdapterPosition()
-
-            when(p0) {
-                viewDetails -> clickHandler.onWordClicked(aPosition)
-            }
-        }
-
         override fun onLongClick(p0: View?): Boolean {
-            val aPosition = wordAdapterPosition()
-
             when(p0) {
-                viewDetails -> clickHandler.onWordLongClicked(aPosition)
+                binding.viewDetails -> clickHandler.onWordLongClicked(adapterPosition)
             }
             return true
         }
 
         init {
-            viewDetails.setOnClickListener(this)
-            viewDetails.setOnLongClickListener(this)
+            binding.viewDetails.setOnLongClickListener(this)
         }
     }
 

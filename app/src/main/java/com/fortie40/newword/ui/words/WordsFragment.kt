@@ -8,18 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperclasses.HelperFunctions
-import com.fortie40.newword.roomdatabase.WordModel
+import com.fortie40.newword.interfaces.IClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
-class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
-
+class WordsFragment : Fragment(), IClickListener {
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: WordsViewModel
@@ -30,10 +28,6 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
     private var numberOfItems: Int = 0
-
-    private val allWords: List<WordModel>? by lazy {
-        viewModel.allWords.value
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,6 +106,18 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         super.onPause()
     }
 
+    override fun onWordClick(clickedItemIndex: Int) {
+        Timber.i("i was clicked $clickedItemIndex")
+    }
+
+    override fun onWordLongClicked(clickedItemIndex: Int) {
+        Timber.i("i was long Clicked $clickedItemIndex")
+        if (actionMode == null) {
+            actionMode = activity!!.startActionMode(ActionModeCallback())
+        }
+        toggleSelection(clickedItemIndex)
+    }
+
     private fun getWords() {
         swipe_to_refresh.isRefreshing = true
         viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
@@ -153,30 +159,6 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
         deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 
-    override fun onWordClicked(clickedItemIndex: Int) {
-        if (actionMode != null) {
-            toggleSelection(clickedItemIndex)
-        } else {
-            val wordAtPosition = allWords?.get(clickedItemIndex)
-            Timber.d("${wordAtPosition?.wordLearned}")
-
-            val action =
-                WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
-            action.wordId = wordAtPosition!!.wordId.toString()
-            activity?.findNavController(R.id.nav_host_fragment)?.navigate(action)
-        }
-    }
-
-    override fun onWordLongClicked(clickedItemIndex: Int) {
-        Timber.d("$clickedItemIndex")
-        val wordAtPosition = allWords?.get(clickedItemIndex)
-        Timber.d("${wordAtPosition?.wordLearned}")
-        if (actionMode == null) {
-            actionMode = activity!!.startActionMode(ActionModeCallback())
-        }
-        toggleSelection(clickedItemIndex)
-    }
-
     inner class ActionModeCallback : ActionMode.Callback {
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             return when(p1?.itemId) {
@@ -202,7 +184,5 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
             wordAdapter.clearSelection()
             actionMode = null
         }
-
     }
-
 }
