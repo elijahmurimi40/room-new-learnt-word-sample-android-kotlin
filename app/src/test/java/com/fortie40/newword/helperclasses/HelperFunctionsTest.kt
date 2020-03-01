@@ -1,4 +1,4 @@
-package com.fortie40.newword.helperfunctions
+package com.fortie40.newword.helperclasses
 
 import org.junit.Assert.*
 import org.junit.Test

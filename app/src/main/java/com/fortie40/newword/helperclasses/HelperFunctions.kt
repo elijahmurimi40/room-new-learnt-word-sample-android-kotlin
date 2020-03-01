@@ -1,4 +1,4 @@
-package com.fortie40.newword.helperfunctions
+package com.fortie40.newword.helperclasses
 
 import android.content.Context
 import android.widget.Toast

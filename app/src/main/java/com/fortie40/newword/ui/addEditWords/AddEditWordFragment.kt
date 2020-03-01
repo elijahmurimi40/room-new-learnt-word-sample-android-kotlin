@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
-import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.helperclasses.HelperFunctions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
 import kotlinx.coroutines.CoroutineScope

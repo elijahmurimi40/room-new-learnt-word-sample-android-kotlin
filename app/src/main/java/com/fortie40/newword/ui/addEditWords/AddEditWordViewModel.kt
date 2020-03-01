@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

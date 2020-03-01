@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordLayoutBinding
-import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 
 

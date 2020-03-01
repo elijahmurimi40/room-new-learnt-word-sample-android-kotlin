@@ -12,7 +12,7 @@ import androidx.navigation.findNavController
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
-import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*

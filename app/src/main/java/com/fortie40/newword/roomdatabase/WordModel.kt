@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.fortie40.newword.helperfunctions.HelperFunctions
+import com.fortie40.newword.helperclasses.HelperFunctions
 import kotlin.random.Random
 
 @Entity(tableName = "words")
