@@ -48,6 +48,7 @@
     <string name="successfully_added">Successfully Added</string>
     <string name="word_edit">Word Edit</string>
     <string name="update_word">Update Word</string>
+    <string name="Updated_successfully">Updated Successfully</string>
 
     <!-- delete dialog class -->
     <string name="cancel_dialog">Cancel</string>

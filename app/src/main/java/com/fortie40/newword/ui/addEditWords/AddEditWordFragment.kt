@@ -87,7 +87,7 @@ class AddEditWordFragment : Fragment() {
         // show toast for successfully updated
         viewModel.isSuccessfullyUpdated.observe(viewLifecycleOwner, Observer {
             if (it) {
-                HelperFunctions.showShortToast(view!!.context, "Updated Successfully")
+                HelperFunctions.showShortToast(view!!.context, getString(R.string.Updated_successfully))
                 viewModel.isSuccessfullyUpdated.value = false
             }
         })
