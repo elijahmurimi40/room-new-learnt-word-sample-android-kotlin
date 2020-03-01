@@ -52,6 +52,10 @@ class WordsFragment : Fragment(), WordAdapter.WordItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        wordsFragmentBinding.apply {
+            this.lifecycleOwner = viewLifecycleOwner
+        }
         // swipe refresh layout
         swipe_to_refresh.setColorSchemeResources(
             R.color.colorAccent, R.color.colorPrimary,
