@@ -59,18 +59,6 @@ class WordRoomDatabaseTest {
         w.removeObserver {  }
     }
 
-    // test for getWord
-    @Test
-    fun getOneWord() = runBlocking {
-        insertWords()
-
-        for (i in 1..words.size) {
-            val position = i - 1
-            val wordModel = wordDao.getWord(i)
-            assertEquals(words[position], wordModel.wordLearned)
-        }
-    }
-
     // delete word
     @Test
     fun deleteWord() = runBlocking {
@@ -97,12 +85,13 @@ class WordRoomDatabaseTest {
 
             wordDao.updateWord(word, language, meaning, i)
         }
-        val wordModel1 = wordDao.getWord(1)
-        val wordModel3 = wordDao.getWord(3)
-        val wordModel4 = wordDao.getWord(4)
-        assertEquals("word1", wordModel1.wordLearned)
-        assertEquals("language3", wordModel3.language)
-        assertEquals("meaning4", wordModel4.meaning)
+        val w = wordDao.getAllWords()
+        w.observeForever {  }
+        val v = w.value!!
+        assertEquals("word1", v[0].wordLearned)
+        assertEquals("language3", v[2].language)
+        assertEquals("meaning4", v[3].meaning)
+        w.removeObserver {  }
     }
 
     // insert words

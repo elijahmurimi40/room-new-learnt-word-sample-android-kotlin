@@ -15,31 +15,26 @@ import kotlinx.coroutines.withContext
 class AddEditWordViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AddEditWordRepository = AddEditWordRepository(application)
 
-    var isSuccessfullyAdded = MutableLiveData<Boolean>(false)
-    var isUpdatingWord = MutableLiveData<Boolean>(false)
-    var isSuccessfullyUpdated = MutableLiveData<Boolean>(false)
+    var isSuccessfullyAdded = MutableLiveData(false)
+    var isUpdatingWord = MutableLiveData(false)
+    var isSuccessfullyUpdated = MutableLiveData(false)
     var wordId = MutableLiveData(0)
 
-    var word = MutableLiveData<String>("")
-    private var _isWordBlank = MutableLiveData<Boolean>(false)
+    var word = MutableLiveData("")
+    private var _isWordBlank = MutableLiveData(false)
     val isWordBlank: LiveData<Boolean> = _isWordBlank
 
-    var language = MutableLiveData<String>("")
-    private var _isLanguageBlank = MutableLiveData<Boolean>(false)
+    var language = MutableLiveData("")
+    private var _isLanguageBlank = MutableLiveData(false)
     val isLanguageBlank: LiveData<Boolean> = _isLanguageBlank
 
-    var meaning = MutableLiveData<String>("")
-    private var _isMeaningBlank = MutableLiveData<Boolean>(false)
+    var meaning = MutableLiveData("")
+    private var _isMeaningBlank = MutableLiveData(false)
     val isMeaningBlank: LiveData<Boolean> = _isMeaningBlank
 
     // save word
     private suspend fun saveWord(wordModel: WordModel) {
         repository.saveWord(wordModel)
-    }
-
-    // get word by id
-    suspend fun getWord(id: Int): WordModel {
-        return repository.getWord(id)
     }
 
     // update the word
