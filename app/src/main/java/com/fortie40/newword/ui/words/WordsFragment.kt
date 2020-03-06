@@ -104,7 +104,7 @@ class WordsFragment : Fragment(), IClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.delete_all_words -> openDialog(5)
+            R.id.delete_all_words -> openDialog(wordAdapter.itemCount)
         }
         return super.onOptionsItemSelected(item)
     }
