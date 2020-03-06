@@ -18,11 +18,11 @@ data class WordModel(
     var language: String = "",
 
     @ColumnInfo(name = "meaning")
-    var meaning: String = ""
-) {
-    @PrimaryKey(autoGenerate = true)
-    var wordId: Int = 0
+    var meaning: String = "",
 
+    @PrimaryKey(autoGenerate = true)
+    var wordId: Int? = null
+) {
     @Ignore
     val wordLearnedC: String = HelperFunctions.capitalizeFirstLetter(wordLearned)
 

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [(WordModel::class)], version = 1)
+@Database(entities = [(WordModel::class)], version = 2)
 abstract class WordRoomDatabase: RoomDatabase() {
     abstract fun wordDao(): WordDao
 
