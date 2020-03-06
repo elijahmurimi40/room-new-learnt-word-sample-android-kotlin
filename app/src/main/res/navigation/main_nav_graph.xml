@@ -21,7 +21,8 @@
         tools:layout="@layout/add_edit_word_fragment" >
         <argument
             android:name="wordId"
-            app:argType="string"
-            android:defaultValue="fortie40" />
+            app:argType="com.fortie40.newword.roomdatabase.WordModel"
+            android:defaultValue="@null"
+            app:nullable="true" />
     </fragment>
 </navigation>

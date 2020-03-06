@@ -13,6 +13,7 @@ import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.interfaces.IClickListener
+import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
@@ -106,8 +107,8 @@ class WordsFragment : Fragment(), IClickListener {
         super.onPause()
     }
 
-    override fun onWordClick(clickedItemIndex: Int) {
-        Timber.i("i was clicked $clickedItemIndex")
+    override fun onWordClick(wordModel: WordModel) {
+        Timber.i("$wordModel")
     }
 
     override fun onWordLongClicked(clickedItemIndex: Int) {

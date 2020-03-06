@@ -30,7 +30,7 @@ class AddEditWordFragment : Fragment() {
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: AddEditWordViewModel
-    private lateinit var wordId: String
+    //private lateinit var wordId: String
     private lateinit var imm: InputMethodManager
 
     override fun onCreateView(
@@ -48,9 +48,6 @@ class AddEditWordFragment : Fragment() {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             activity!!.onBackPressed()
         }
-
-        // get bundle
-        wordId = AddEditWordFragmentArgs.fromBundle(arguments!!).wordId
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
         root = addEditWordFragmentBinding.root
@@ -91,9 +88,6 @@ class AddEditWordFragment : Fragment() {
                 viewModel.isSuccessfullyUpdated.value = false
             }
         })
-
-        // display word if available
-        getWord()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,7 +98,7 @@ class AddEditWordFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_search).isVisible = false
-        menu.findItem(R.id.action_delete).isVisible = wordId != WORD_ID
+        // menu.findItem(R.id.action_delete).isVisible = wordId != WORD_ID
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -114,27 +108,27 @@ class AddEditWordFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getWord() {
-        if (wordId == WORD_ID) {
-            viewModel.isUpdatingWord.value = false
-        } else {
-            val wordIdInt = wordId.toInt()
-            viewModel.wordId.value = wordIdInt
-            viewModel.isUpdatingWord.value = true
-            save_word.text = getString(R.string.update_word)
-            activity!!.title = getString(R.string.word_edit)
-            activity?.invalidateOptionsMenu()
-
-            CoroutineScope(IO).launch {
-                val wm = viewModel.getWord(wordIdInt)
-                withContext(Main) {
-                    viewModel.word.value = wm.wordLearnedC
-                    viewModel.language.value = wm.languageC
-                    viewModel.meaning.value = wm.meaningC
-                }
-            }
-        }
-    }
+//    private fun getWord() {
+//        if (wordId == WORD_ID) {
+//            viewModel.isUpdatingWord.value = false
+//        } else {
+//            val wordIdInt = wordId.toInt()
+//            viewModel.wordId.value = wordIdInt
+//            viewModel.isUpdatingWord.value = true
+//            save_word.text = getString(R.string.update_word)
+//            activity!!.title = getString(R.string.word_edit)
+//            activity?.invalidateOptionsMenu()
+//
+//            CoroutineScope(IO).launch {
+//                val wm = viewModel.getWord(wordIdInt)
+//                withContext(Main) {
+//                    viewModel.word.value = wm.wordLearnedC
+//                    viewModel.language.value = wm.languageC
+//                    viewModel.meaning.value = wm.meaningC
+//                }
+//            }
+//        }
+//    }
 
     private fun openDialog() {
         val deleteDialog = DeleteDialog()

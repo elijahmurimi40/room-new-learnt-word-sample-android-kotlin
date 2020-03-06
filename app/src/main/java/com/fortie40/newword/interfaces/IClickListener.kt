@@ -1,6 +1,8 @@
 package com.fortie40.newword.interfaces
 
+import com.fortie40.newword.roomdatabase.WordModel
+
 interface IClickListener {
-    fun onWordClick(clickedItemIndex: Int)
+    fun onWordClick(wordModel: WordModel)
     fun onWordLongClicked(clickedItemIndex: Int)
 }
