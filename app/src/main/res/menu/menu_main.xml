@@ -9,7 +9,7 @@
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />
     <item
-        android:id="@+id/delete_all_notes"
+        android:id="@+id/delete_all_words"
         app:showAsAction="never"
-        android:title="@string/delete_all_notes" />
+        android:title="@string/delete_all_words" />
 </menu>
