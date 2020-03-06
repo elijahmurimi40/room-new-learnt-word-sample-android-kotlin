@@ -6,15 +6,17 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
 import timber.log.Timber
 
 class DeleteDialog: AppCompatDialogFragment() {
-    private var numberOfItems: Int = 1
-
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
+            val args = arguments
+            val numberOfItems = args?.getInt(NUMBER_OF_ITEMS, 1)
+
             val builder = AlertDialog.Builder(activity!!)
             val inflater = it!!.layoutInflater
             val view = inflater.inflate(R.layout.dialog_layout, null)

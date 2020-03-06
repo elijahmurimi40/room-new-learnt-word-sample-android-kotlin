@@ -19,4 +19,8 @@ class WordsRepository() {
     fun getAllWords(): LiveData<List<WordModel>> {
         return allWords
     }
+
+    suspend fun deleteAllWords() {
+        wordDao.deleteAllWords()
+    }
 }

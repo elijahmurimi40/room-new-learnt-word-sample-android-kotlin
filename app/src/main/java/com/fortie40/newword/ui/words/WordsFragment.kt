@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
@@ -101,6 +102,13 @@ class WordsFragment : Fragment(), IClickListener {
         })
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.delete_all_words -> openDialog(5)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onPause() {
         if (isInitialized) {
             handler.removeCallbacks(r)
@@ -159,8 +167,11 @@ class WordsFragment : Fragment(), IClickListener {
         }
     }
 
-    private fun openDialog() {
+    private fun openDialog(numberOfItems: Int) {
         val deleteDialog = DeleteDialog()
+        val args = Bundle()
+        args.putInt(NUMBER_OF_ITEMS, numberOfItems)
+        deleteDialog.arguments = args
         deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 
@@ -169,7 +180,7 @@ class WordsFragment : Fragment(), IClickListener {
             return when(p1?.itemId) {
                 R.id.action_delete -> {
                     Timber.d("Selected")
-                    openDialog()
+                    openDialog(10)
                     true
                 }
                 else -> false
