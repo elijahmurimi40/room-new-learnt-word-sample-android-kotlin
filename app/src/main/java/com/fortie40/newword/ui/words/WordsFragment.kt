@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
@@ -108,7 +109,10 @@ class WordsFragment : Fragment(), IClickListener {
     }
 
     override fun onWordClick(wordModel: WordModel) {
-        Timber.i("$wordModel")
+        val action =
+            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
+        action.wordM = wordModel
+        activity!!.findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     override fun onWordLongClicked(clickedItemIndex: Int) {

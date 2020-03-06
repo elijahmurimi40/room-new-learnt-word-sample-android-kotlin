@@ -13,25 +13,18 @@ import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperclasses.HelperFunctions
+import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddEditWordFragment : Fragment() {
-
-    companion object {
-        private const val WORD_ID: String = "fortie40"
-    }
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: AddEditWordViewModel
-    //private lateinit var wordId: String
     private lateinit var imm: InputMethodManager
+
+    private var wordModel: WordModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,10 +65,17 @@ class AddEditWordFragment : Fragment() {
             this.addEditWordViewModel = viewModel
         }
 
+        // get wordModel
+        wordModel = AddEditWordFragmentArgs.fromBundle(arguments!!).wordM
+        getWord()
+
         // show added toast
         viewModel.isSuccessfullyAdded.observe(viewLifecycleOwner, Observer {
             if (it) {
-                HelperFunctions.showShortToast(view!!.context, getString(R.string.successfully_added))
+                HelperFunctions.showShortToast(
+                    view!!.context,
+                    getString(R.string.successfully_added)
+                )
                 scroll_view.fullScroll(View.FOCUS_UP)
                 viewModel.isSuccessfullyAdded.value = false
             }
@@ -84,7 +84,10 @@ class AddEditWordFragment : Fragment() {
         // show toast for successfully updated
         viewModel.isSuccessfullyUpdated.observe(viewLifecycleOwner, Observer {
             if (it) {
-                HelperFunctions.showShortToast(view!!.context, getString(R.string.Updated_successfully))
+                HelperFunctions.showShortToast(
+                    view!!.context,
+                    getString(R.string.Updated_successfully)
+                )
                 viewModel.isSuccessfullyUpdated.value = false
             }
         })
@@ -98,7 +101,7 @@ class AddEditWordFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_search).isVisible = false
-        // menu.findItem(R.id.action_delete).isVisible = wordId != WORD_ID
+        menu.findItem(R.id.action_delete).isVisible = wordModel != null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -108,27 +111,21 @@ class AddEditWordFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-//    private fun getWord() {
-//        if (wordId == WORD_ID) {
-//            viewModel.isUpdatingWord.value = false
-//        } else {
-//            val wordIdInt = wordId.toInt()
-//            viewModel.wordId.value = wordIdInt
-//            viewModel.isUpdatingWord.value = true
-//            save_word.text = getString(R.string.update_word)
-//            activity!!.title = getString(R.string.word_edit)
-//            activity?.invalidateOptionsMenu()
-//
-//            CoroutineScope(IO).launch {
-//                val wm = viewModel.getWord(wordIdInt)
-//                withContext(Main) {
-//                    viewModel.word.value = wm.wordLearnedC
-//                    viewModel.language.value = wm.languageC
-//                    viewModel.meaning.value = wm.meaningC
-//                }
-//            }
-//        }
-//    }
+    private fun getWord() {
+        if (wordModel == null) {
+            viewModel.isUpdatingWord.value = false
+        } else {
+            viewModel.isUpdatingWord.value = true
+            viewModel.wordId.value = wordModel!!.wordId
+            save_word.text = getString(R.string.update_word)
+            activity!!.title = getString(R.string.word_edit)
+            activity?.invalidateOptionsMenu()
+
+            viewModel.word.value = wordModel!!.wordLearnedC
+            viewModel.language.value = wordModel!!.languageC
+            viewModel.meaning.value = wordModel!!.meaningC
+        }
+    }
 
     private fun openDialog() {
         val deleteDialog = DeleteDialog()

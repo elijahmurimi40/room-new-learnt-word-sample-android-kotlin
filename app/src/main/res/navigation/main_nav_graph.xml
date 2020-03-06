@@ -20,7 +20,7 @@
         android:label="@string/add_edit_words"
         tools:layout="@layout/add_edit_word_fragment" >
         <argument
-            android:name="wordId"
+            android:name="wordM"
             app:argType="com.fortie40.newword.roomdatabase.WordModel"
             android:defaultValue="@null"
             app:nullable="true" />
