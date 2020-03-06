@@ -14,9 +14,12 @@ interface WordDao {
     @Query("SELECT * FROM words ORDER BY word_learned ASC")
     fun getAllWords(): LiveData<List<WordModel>>
 
+    @Query("UPDATE words SET word_learned = :wordLearned, language = :language, meaning = :meaning WHERE wordId = :id")
+    suspend fun updateWord(wordLearned: String, language: String, meaning: String, id: Int)
+
     @Query("DELETE FROM words WHERE wordId = :id")
     suspend fun deleteWord(id: Int)
 
-    @Query("UPDATE words SET word_learned = :wordLearned, language = :language, meaning = :meaning WHERE wordId = :id")
-    suspend fun updateWord(wordLearned: String, language: String, meaning: String, id: Int)
+    @Query("DELETE FROM words")
+    suspend fun deleteAllWords()
 }
