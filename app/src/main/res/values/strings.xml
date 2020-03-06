@@ -8,6 +8,7 @@
 
     <!-- menu main -->
     <string name="search">Search</string>
+    <string name="delete_all_notes">Delete All Notes</string>
 
     <!-- add edit menu -->
     <string name="delete">Delete</string>

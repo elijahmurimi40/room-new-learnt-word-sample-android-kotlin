@@ -101,6 +101,7 @@ class AddEditWordFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_search).isVisible = false
+        menu.findItem(R.id.delete_all_notes).isVisible = false
         menu.findItem(R.id.action_delete).isVisible = wordModel != null
     }
 
