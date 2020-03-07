@@ -13,11 +13,12 @@ import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.helperclasses.HelperFunctions
+import com.fortie40.newword.interfaces.IDeleteDialogListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
 
-class AddEditWordFragment : Fragment() {
+class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
@@ -112,6 +113,10 @@ class AddEditWordFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDeletePressed() {
+        activity!!.onBackPressed()
+    }
+
     private fun getWord() {
         if (wordModel == null) {
             viewModel.isUpdatingWord.value = false
@@ -129,7 +134,7 @@ class AddEditWordFragment : Fragment() {
     }
 
     private fun openDialog() {
-        val deleteDialog = DeleteDialog()
+        val deleteDialog = DeleteDialog(this)
         deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
     }
 }

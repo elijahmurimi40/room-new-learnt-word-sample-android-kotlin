@@ -8,9 +8,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
-import timber.log.Timber
+import com.fortie40.newword.interfaces.IDeleteDialogListener
 
-class DeleteDialog: AppCompatDialogFragment() {
+class DeleteDialog(): AppCompatDialogFragment() {
+    private lateinit var deleteDialogListener: IDeleteDialogListener
+
+    constructor(listener: IDeleteDialogListener): this() {
+        deleteDialogListener = listener
+    }
+
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
@@ -23,7 +29,7 @@ class DeleteDialog: AppCompatDialogFragment() {
 
             val dialogTitle = view.findViewById<TextView>(R.id.delete_dialog_title)
             val dialogContent = view.findViewById<TextView>(R.id.delete_dialog_content)
-            if (numberOfItems == 1) {
+            if (numberOfItems == null) {
                 dialogTitle.text = getString(R.string.delete_word)
                 dialogContent.text = getString(R.string._1_word_will_be_permanently_deleted)
             } else {
@@ -35,9 +41,10 @@ class DeleteDialog: AppCompatDialogFragment() {
             builder.setView(view)
                 .setNegativeButton(getString(R.string.cancel_dialog)) { _, _ ->
                     dialog!!.cancel()
+                    dialog!!.dismiss()
                 }
                 .setPositiveButton(getString(R.string.delete_dialog_)) { _, _ ->
-                    Timber.d("Deleting")
+                    deleteDialogListener.onDeletePressed()
                 }
 
             builder.create()
