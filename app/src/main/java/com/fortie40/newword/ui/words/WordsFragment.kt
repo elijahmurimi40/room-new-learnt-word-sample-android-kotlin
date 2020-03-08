@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.fortie40.newword.DELETE_DIALOG
 import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
@@ -172,7 +173,7 @@ class WordsFragment : Fragment(), IClickListener {
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS, numberOfItems)
         deleteDialog.arguments = args
-        deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
+        deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
     }
 
     inner class ActionModeCallback : ActionMode.Callback {

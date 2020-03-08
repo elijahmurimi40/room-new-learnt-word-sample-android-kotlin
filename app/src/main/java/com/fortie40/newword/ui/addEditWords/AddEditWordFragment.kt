@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.fortie40.newword.DELETE_DIALOG
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
@@ -135,6 +136,6 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     private fun openDialog() {
         val deleteDialog = DeleteDialog(this)
-        deleteDialog.show(activity!!.supportFragmentManager, getString(R.string.delete_dialog))
+        deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
     }
 }
