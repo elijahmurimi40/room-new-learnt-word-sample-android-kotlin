@@ -1,7 +1,7 @@
 package com.fortie40.newword.helperclasses
 
-import android.content.Context
-import android.widget.Toast
+import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 object HelperFunctions {
@@ -25,7 +25,7 @@ object HelperFunctions {
     }
 
     // show short toast
-    fun showShortToast(context: Context, str: String) {
-        Toast.makeText(context, str, Toast.LENGTH_SHORT).show()
+    fun showShortSnackBar(view: View, str: String) {
+        Snackbar.make(view, str, Snackbar.LENGTH_SHORT).show()
     }
 }

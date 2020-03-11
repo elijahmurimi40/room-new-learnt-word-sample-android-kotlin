@@ -74,8 +74,8 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         // show added toast
         viewModel.isSuccessfullyAdded.observe(viewLifecycleOwner, Observer {
             if (it) {
-                HelperFunctions.showShortToast(
-                    view!!.context,
+                HelperFunctions.showShortSnackBar(
+                    view!!,
                     getString(R.string.successfully_added)
                 )
                 scroll_view.fullScroll(View.FOCUS_UP)
@@ -86,8 +86,8 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         // show toast for successfully updated
         viewModel.isSuccessfullyUpdated.observe(viewLifecycleOwner, Observer {
             if (it) {
-                HelperFunctions.showShortToast(
-                    view!!.context,
+                HelperFunctions.showShortSnackBar(
+                    view!!,
                     getString(R.string.Updated_successfully)
                 )
                 viewModel.isSuccessfullyUpdated.value = false
