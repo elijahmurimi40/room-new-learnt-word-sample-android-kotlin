@@ -115,6 +115,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
     }
 
     override fun onDeletePressed() {
+        HelperFunctions.showShortSnackBar(view!!, getString(R.string.successfully_deleted))
         activity!!.onBackPressed()
     }
 
