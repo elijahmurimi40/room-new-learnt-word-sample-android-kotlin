@@ -37,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_0"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="@+id/progress_bar"
         app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
 
@@ -44,8 +45,9 @@
         android:id="@+id/items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/_1_1"
         android:paddingBottom="16dp"
+        android:text="@string/_1_1"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/progress_bar"
         app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
