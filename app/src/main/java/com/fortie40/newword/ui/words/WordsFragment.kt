@@ -9,10 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.fortie40.newword.DELETE_DIALOG
-import com.fortie40.newword.DELETE_DIALOG_PROGRESS
-import com.fortie40.newword.NUMBER_OF_ITEMS
-import com.fortie40.newword.R
+import com.fortie40.newword.*
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.dialogs.DeleteDialogProgress
@@ -190,6 +187,9 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     private fun openDeleteDialogProgress() {
         val deleteDialogProgress = DeleteDialogProgress()
+        val args = Bundle()
+        args.putInt(NUMBER_OF_ITEMS_TO_DELETE, 8)
+        deleteDialogProgress.arguments = args
         deleteDialogProgress.show(activity!!.supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
 
