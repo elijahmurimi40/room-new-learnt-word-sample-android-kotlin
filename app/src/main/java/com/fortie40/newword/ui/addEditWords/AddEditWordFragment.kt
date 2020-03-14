@@ -114,14 +114,9 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         DeleteDialog.deleteDialogListener = this
-    }
-
-    override fun onStop() {
-        DeleteDialog.deleteDialogListener = null
-        super.onStop()
     }
 
     override fun onDeletePressed() {

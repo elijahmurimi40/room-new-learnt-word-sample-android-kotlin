@@ -113,8 +113,8 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         DeleteDialog.deleteDialogListener = this
     }
 
@@ -123,11 +123,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
             handler.removeCallbacks(r)
         }
         super.onPause()
-    }
-
-    override fun onStop() {
-        DeleteDialog.deleteDialogListener = null
-        super.onStop()
     }
 
     override fun onWordClick(wordModel: WordModel) {
