@@ -11,7 +11,9 @@ import com.fortie40.newword.R
 import com.fortie40.newword.interfaces.IDeleteDialogListener
 
 class DeleteDialog: AppCompatDialogFragment() {
-    private lateinit var deleteDialogListener: IDeleteDialogListener
+    companion object {
+        var deleteDialogListener: IDeleteDialogListener? = null
+    }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -40,7 +42,7 @@ class DeleteDialog: AppCompatDialogFragment() {
                     dialog!!.dismiss()
                 }
                 .setPositiveButton(getString(R.string.delete_dialog_)) { _, _ ->
-                    deleteDialogListener.onDeletePressed()
+                    deleteDialogListener!!.onDeletePressed()
                 }
 
             builder.create()
