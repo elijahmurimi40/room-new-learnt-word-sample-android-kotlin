@@ -7,6 +7,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fortie40.newword.databinding.ActivityMainBinding
+import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.roomdatabase.WordRoomDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -52,8 +53,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
+    override fun onStop() {
         WordRoomDatabase.getDataBase(application).close()
-        super.onPause()
+        DeleteDialog.deleteDialogListener = null
+        super.onStop()
     }
 }
