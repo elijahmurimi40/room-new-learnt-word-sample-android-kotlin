@@ -109,7 +109,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_delete -> openDialog()
+            R.id.action_delete -> openDeleteDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -145,7 +145,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         }
     }
 
-    private fun openDialog() {
+    private fun openDeleteDialog() {
         val deleteDialog = DeleteDialog()
         deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
     }

@@ -23,7 +23,7 @@ class DeleteDialog: AppCompatDialogFragment() {
 
             val builder = AlertDialog.Builder(activity!!)
             val inflater = it!!.layoutInflater
-            val view = inflater.inflate(R.layout.dialog_layout, null)
+            val view = inflater.inflate(R.layout.delete_dialog, null)
 
             val dialogTitle = view.findViewById<TextView>(R.id.delete_dialog_title)
             val dialogContent = view.findViewById<TextView>(R.id.delete_dialog_content)

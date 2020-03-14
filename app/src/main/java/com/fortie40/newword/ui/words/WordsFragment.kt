@@ -108,7 +108,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.delete_all_words -> openDialog(wordAdapter.itemCount)
+            R.id.delete_all_words -> openDeleteDialog(wordAdapter.itemCount)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -185,7 +185,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         }
     }
 
-    private fun openDialog(numberOfItems: Int) {
+    private fun openDeleteDialog(numberOfItems: Int) {
         val deleteDialog = DeleteDialog()
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS, numberOfItems)
@@ -203,7 +203,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
             return when(p1?.itemId) {
                 R.id.action_delete -> {
                     Timber.d("Selected")
-                    openDialog(10)
+                    openDeleteDialog(10)
                     true
                 }
                 else -> false
