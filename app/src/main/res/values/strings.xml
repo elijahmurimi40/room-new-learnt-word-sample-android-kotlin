@@ -28,12 +28,17 @@
     <string name="meaning">Meaning</string>
     <string name="save_word">Save Word</string>
 
-    <!-- dialog layout -->
+    <!-- delete dialog layout -->
     <string name="delete_dialog">Delete Dialog</string>
     <string name="delete_word">Delete Word?</string>
     <string name="delete_words">Delete Words?</string>
     <string name="_1_word_will_be_permanently_deleted">1 word will be permanently deleted</string>
     <string name="words_will_be_permanently_deleted">%1$s words will be permanently deleted</string>
+
+    <!-- delete dialog progress layout -->
+    <string name="_0">0%</string>
+    <string name="_1_1">1/ 1</string>
+    <string name="deleting">Deleting …</string>
 
     <!-- word layout -->
     <string name="dummy_text">dummy text</string>

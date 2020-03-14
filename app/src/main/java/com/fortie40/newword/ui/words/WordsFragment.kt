@@ -10,18 +10,21 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.fortie40.newword.DELETE_DIALOG
+import com.fortie40.newword.DELETE_DIALOG_PROGRESS
 import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
+import com.fortie40.newword.dialogs.DeleteDialogProgress
 import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.interfaces.IClickListener
+import com.fortie40.newword.interfaces.IDeleteDialogListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
-class WordsFragment : Fragment(), IClickListener {
+class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: WordsViewModel
@@ -110,11 +113,21 @@ class WordsFragment : Fragment(), IClickListener {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onStart() {
+        super.onStart()
+        DeleteDialog.deleteDialogListener = this
+    }
+
     override fun onPause() {
         if (isInitialized) {
             handler.removeCallbacks(r)
         }
         super.onPause()
+    }
+
+    override fun onStop() {
+        DeleteDialog.deleteDialogListener = null
+        super.onStop()
     }
 
     override fun onWordClick(wordModel: WordModel) {
@@ -130,6 +143,10 @@ class WordsFragment : Fragment(), IClickListener {
             actionMode = activity!!.startActionMode(ActionModeCallback())
         }
         toggleSelection(clickedItemIndex)
+    }
+
+    override fun onDeletePressed() {
+        openDeleteDialogProgress()
     }
 
     private fun getWords() {
@@ -174,6 +191,11 @@ class WordsFragment : Fragment(), IClickListener {
         args.putInt(NUMBER_OF_ITEMS, numberOfItems)
         deleteDialog.arguments = args
         deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
+    }
+
+    private fun openDeleteDialogProgress() {
+        val deleteDialogProgress = DeleteDialogProgress()
+        deleteDialogProgress.show(activity!!.supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
 
     inner class ActionModeCallback : ActionMode.Callback {
