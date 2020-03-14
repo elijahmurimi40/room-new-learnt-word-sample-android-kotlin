@@ -10,12 +10,8 @@ import com.fortie40.newword.NUMBER_OF_ITEMS
 import com.fortie40.newword.R
 import com.fortie40.newword.interfaces.IDeleteDialogListener
 
-class DeleteDialog(): AppCompatDialogFragment() {
+class DeleteDialog: AppCompatDialogFragment() {
     private lateinit var deleteDialogListener: IDeleteDialogListener
-
-    constructor(listener: IDeleteDialogListener): this() {
-        deleteDialogListener = listener
-    }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
