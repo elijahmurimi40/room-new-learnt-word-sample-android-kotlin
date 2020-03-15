@@ -75,7 +75,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         viewModel.isSuccessfullyAdded.observe(viewLifecycleOwner, Observer {
             if (it) {
                 HelperFunctions.showShortSnackBar(
-                    view!!,
+                    requireView(),
                     getString(R.string.successfully_added)
                 )
                 scroll_view.fullScroll(View.FOCUS_UP)
@@ -87,7 +87,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         viewModel.isSuccessfullyUpdated.observe(viewLifecycleOwner, Observer {
             if (it) {
                 HelperFunctions.showShortSnackBar(
-                    view!!,
+                    requireView(),
                     getString(R.string.Updated_successfully)
                 )
                 viewModel.isSuccessfullyUpdated.value = false
@@ -120,7 +120,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
     }
 
     override fun onDeletePressed() {
-        HelperFunctions.showShortSnackBar(view!!, getString(R.string.successfully_deleted))
+        HelperFunctions.showShortSnackBar(requireView(), getString(R.string.successfully_deleted))
         requireActivity().onBackPressed()
     }
 
