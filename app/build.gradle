@@ -66,4 +66,7 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Fragment artifacts
+    implementation "androidx.fragment:fragment-ktx:1.2.2"
 }
