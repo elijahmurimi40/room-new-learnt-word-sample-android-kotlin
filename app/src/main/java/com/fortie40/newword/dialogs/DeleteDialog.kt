@@ -21,7 +21,7 @@ class DeleteDialog: AppCompatDialogFragment() {
             val args = arguments
             val numberOfItems = args?.getInt(NUMBER_OF_ITEMS, 1)
 
-            val builder = AlertDialog.Builder(activity!!)
+            val builder = AlertDialog.Builder(requireActivity())
             val inflater = it!!.layoutInflater
             val view = inflater.inflate(R.layout.delete_dialog, null)
 

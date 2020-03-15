@@ -32,16 +32,16 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE)
+        imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE)
                 as InputMethodManager
 
         // change toolbar title
-        activity!!.title = getString(R.string.add_word)
+        requireActivity().title = getString(R.string.add_word)
         // back button
-        activity!!.toolbar.setNavigationIcon(R.drawable.back_button)
-        activity!!.toolbar.setNavigationOnClickListener {
+        requireActivity().toolbar.setNavigationIcon(R.drawable.back_button)
+        requireActivity().toolbar.setNavigationOnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
 
         addEditWordFragmentBinding = AddEditWordFragmentBinding.inflate(inflater)
@@ -121,7 +121,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     override fun onDeletePressed() {
         HelperFunctions.showShortSnackBar(view!!, getString(R.string.successfully_deleted))
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     private fun getWord() {
@@ -131,7 +131,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
             viewModel.isUpdatingWord.value = true
             viewModel.wordId.value = wordModel!!.wordId
             save_word.text = getString(R.string.update_word)
-            activity!!.title = getString(R.string.word_edit)
+            requireActivity().title = getString(R.string.word_edit)
             activity?.invalidateOptionsMenu()
 
             viewModel.word.value = wordModel!!.wordLearnedC
@@ -142,6 +142,6 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     private fun openDeleteDialog() {
         val deleteDialog = DeleteDialog()
-        deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
+        deleteDialog.show(requireActivity().supportFragmentManager, DELETE_DIALOG)
     }
 }

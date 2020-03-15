@@ -28,7 +28,7 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
         return activity.let {
             args = arguments
             numberOfItemsToDelete = args!!.getInt(NUMBER_OF_ITEMS_TO_DELETE)
-            val builder = AlertDialog.Builder(activity!!)
+            val builder = AlertDialog.Builder(requireActivity())
             val inflater = it!!.layoutInflater
             dView = inflater.inflate(R.layout.delete_dialog_progress, null)
 

@@ -39,9 +39,9 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         savedInstanceState: Bundle?
     ): View? {
         // change toolbar title
-        activity!!.title = getString(R.string.words)
+        requireActivity().title = getString(R.string.words)
         // back button
-        activity!!.toolbar.navigationIcon = null
+        requireActivity().toolbar.navigationIcon = null
 
         wordsFragmentBinding = WordsFragmentBinding.inflate(inflater)
         root = wordsFragmentBinding.root
@@ -114,13 +114,13 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         val action =
             WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
         action.wordM = wordModel
-        activity!!.findNavController(R.id.nav_host_fragment).navigate(action)
+        requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     override fun onWordLongClicked(clickedItemIndex: Int) {
         Timber.i("i was long Clicked $clickedItemIndex")
         if (actionMode == null) {
-            actionMode = activity!!.startActionMode(ActionModeCallback())
+            actionMode = requireActivity().startActionMode(ActionModeCallback())
         }
         toggleSelection(clickedItemIndex)
     }
@@ -197,7 +197,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS, numberOfItems)
         deleteDialog.arguments = args
-        deleteDialog.show(activity!!.supportFragmentManager, DELETE_DIALOG)
+        deleteDialog.show(requireActivity().supportFragmentManager, DELETE_DIALOG)
     }
 
     private fun openDeleteDialogProgress() {
@@ -205,7 +205,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS_TO_DELETE, 8)
         deleteDialogProgress.arguments = args
-        deleteDialogProgress.show(activity!!.supportFragmentManager, DELETE_DIALOG_PROGRESS)
+        deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
 
     inner class ActionModeCallback : ActionMode.Callback {
