@@ -36,8 +36,8 @@
     <string name="words_will_be_permanently_deleted">%1$s words will be permanently deleted</string>
 
     <!-- delete dialog progress layout -->
-    <string name="_0">%1$s%%</string>
-    <string name="_1_1">%1$s/ %2$s</string>
+    <string name="_0">%1$d%%</string>
+    <string name="_1_1">%1$d/ %2$d</string>
     <string name="deleting">Deleting …</string>
 
     <!-- word layout -->
