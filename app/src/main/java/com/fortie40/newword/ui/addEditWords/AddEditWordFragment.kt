@@ -68,7 +68,7 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         }
 
         // get wordModel
-        wordModel = AddEditWordFragmentArgs.fromBundle(arguments!!).wordM
+        wordModel = AddEditWordFragmentArgs.fromBundle(requireArguments()).wordM
         getWord()
 
         // show added toast
