@@ -4,5 +4,4 @@ import com.fortie40.newword.roomdatabase.WordModel
 
 interface IClickListener {
     fun onWordClick(wordModel: WordModel)
-    fun onWordLongClicked(clickedItemIndex: Int)
 }

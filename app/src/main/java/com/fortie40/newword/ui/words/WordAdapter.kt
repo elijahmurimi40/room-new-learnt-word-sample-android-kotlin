@@ -1,13 +1,12 @@
 package com.fortie40.newword.ui.words
 
-import android.graphics.Color
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,13 +23,17 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
     private lateinit var clickHandler: IClickListener
-    private lateinit var selectedItems: SparseBooleanArray
+
+    var tracker: SelectionTracker<Long>? = null
 
     constructor(listener: IClickListener, wordList: List<WordModel>): this() {
         clickHandler = listener
         wOriginalList = wordList
         wFilteredList = wordList
-        selectedItems = SparseBooleanArray()
+    }
+
+    init {
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -41,19 +44,22 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.bind(getItem(position))
         val context = holder.binding.viewDetails.context
-        holder.binding.iClickListener = clickHandler
 
-        when(isSelected(position)) {
-            true -> {
-                holder.binding.viewDetails.setBackgroundColor(Color.LTGRAY)
-                holder.binding.icon.text = ""
-                holder.binding.icon.background = context.getDrawable(R.drawable.circle_icon)
+        tracker?.let {
+            holder.bind(getItem(position), it.isSelected(position.toLong()))
+            when(it.isSelected(position.toLong())) {
+                true -> {
+                    holder.binding.icon.text = ""
+                    holder.binding.icon.background = context.getDrawable(R.drawable.circle_icon)
+                }
             }
-            else -> holder.binding.viewDetails.setBackgroundColor(Color.WHITE)
         }
+
+        holder.binding.iClickListener = clickHandler
     }
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
         override fun areItemsTheSame(oldItem: WordModel, newItem: WordModel): Boolean {
@@ -68,23 +74,20 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
     }
 
     inner class WordViewHolder(val binding: WordLayoutBinding):
-        RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(wordModel: WordModel) {
+        fun bind(wordModel: WordModel, isActivated: Boolean = false) {
             binding.wordM = wordModel
+            itemView.isActivated = isActivated
             binding.executePendingBindings()
         }
 
-        override fun onLongClick(p0: View?): Boolean {
-            when(p0) {
-                binding.viewDetails -> clickHandler.onWordLongClicked(adapterPosition)
-            }
-            return true
-        }
+        fun getItemDetails() : ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getSelectionKey(): Long? = itemId
 
-        init {
-            binding.viewDetails.setOnLongClickListener(this)
-        }
+                override fun getPosition(): Int = adapterPosition
+            }
     }
 
     override fun getFilter(): Filter {
@@ -111,39 +114,6 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
                 submitList(p1?.values as List<WordModel>)
             }
-        }
-    }
-
-    private fun getSelectedItems(): ArrayList<Int> {
-        val items: ArrayList<Int> = ArrayList(selectedItems.size())
-        for (i in 0 until selectedItems.size()) {
-            items.add(selectedItems.keyAt(i))
-        }
-        return items
-    }
-
-    fun getSelectedItemCount(): Int {
-        return getSelectedItems().size
-    }
-
-    fun toggleSelection(position: Int) {
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position)
-        } else {
-            selectedItems.put(position, true)
-        }
-        notifyItemChanged(position)
-    }
-
-    private fun isSelected(position: Int): Boolean {
-        return getSelectedItems().contains(position)
-    }
-
-    fun clearSelection() {
-        val selection:List<Int> = getSelectedItems()
-        selectedItems.clear()
-        for (i in selection) {
-            notifyItemChanged(i)
         }
     }
 }

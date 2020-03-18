@@ -9,6 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
@@ -32,7 +36,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
-    private var numberOfItems: Int = 0
+    private var tracker: SelectionTracker<Long>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,18 +115,13 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     }
 
     override fun onWordClick(wordModel: WordModel) {
+        if (actionMode != null) {
+            return
+        }
         val action =
             WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
         action.wordM = wordModel
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
-    }
-
-    override fun onWordLongClicked(clickedItemIndex: Int) {
-        Timber.i("i was long Clicked $clickedItemIndex")
-        if (actionMode == null) {
-            actionMode = requireActivity().startActionMode(ActionModeCallback())
-        }
-        toggleSelection(clickedItemIndex)
     }
 
     override fun onDeletePressed() {
@@ -172,24 +171,42 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
                 }
                 wordAdapter = WordAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
-                //word_items.layoutManager = LinearLayoutManager(activity)
                 word_items.adapter = wordAdapter
+                setUpTracker()
                 swipe_to_refresh.isRefreshing = false
             }
         })
     }
 
-    private fun toggleSelection(position: Int) {
-        wordAdapter.toggleSelection(position)
-        val count = wordAdapter.getSelectedItemCount()
+    private fun setUpTracker() {
+        tracker = SelectionTracker.Builder(
+            MY_SELECTION,
+            word_items,
+            StableIdKeyProvider(word_items),
+            WordsItemDetailsLookup(word_items),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
 
-        if (count == 0) {
-            actionMode?.finish()
-        } else {
-            actionMode?.title = count.toString()
-            actionMode?.invalidate()
-            numberOfItems = count
-        }
+        tracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+                val items = tracker!!.selection.size()
+                if (actionMode == null) {
+                    actionMode = requireActivity().startActionMode(ActionModeCallback())
+                }
+                when(items) {
+                    0 -> actionMode?.finish()
+                    else -> {
+                        actionMode?.title = items.toString()
+                        actionMode?.invalidate()
+                    }
+                }
+            }
+        })
+
+        wordAdapter.tracker = tracker
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
@@ -213,7 +230,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
             return when(p1?.itemId) {
                 R.id.action_delete -> {
                     Timber.d("Selected")
-                    openDeleteDialog(10)
+                    openDeleteDialog(tracker!!.selection.size())
                     true
                 }
                 else -> false
@@ -230,7 +247,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         }
 
         override fun onDestroyActionMode(p0: ActionMode?) {
-            wordAdapter.clearSelection()
+            tracker!!.clearSelection()
             actionMode = null
         }
     }

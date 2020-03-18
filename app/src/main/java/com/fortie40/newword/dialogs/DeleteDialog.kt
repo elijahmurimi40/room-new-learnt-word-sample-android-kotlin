@@ -27,7 +27,7 @@ class DeleteDialog: AppCompatDialogFragment() {
 
             val dialogTitle = view.findViewById<TextView>(R.id.delete_dialog_title)
             val dialogContent = view.findViewById<TextView>(R.id.delete_dialog_content)
-            if (numberOfItems == null) {
+            if (numberOfItems == null || numberOfItems == 1) {
                 dialogTitle.text = getString(R.string.delete_word)
                 dialogContent.text = getString(R.string._1_word_will_be_permanently_deleted)
             } else {

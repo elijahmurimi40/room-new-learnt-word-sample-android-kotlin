@@ -16,3 +16,6 @@ const val NUMBER_OF_ITEMS_TO_DELETE = "number_of_items_to_delete"
 // progress is set in DeleteDialogProgress class
 const val PROGRESS_MIN = 0
 const val PROGRESS_MAX = 100
+
+// selection id for SelectionTracker.Builder
+const val MY_SELECTION = "my_selection"
