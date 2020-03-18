@@ -37,6 +37,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
     private var tracker: SelectionTracker<Long>? = null
+    private var _savedInstanceState: Bundle? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +56,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        _savedInstanceState = savedInstanceState
 
         wordsFragmentBinding.apply {
             this.lifecycleOwner = viewLifecycleOwner
@@ -112,6 +114,11 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
             handler.removeCallbacks(wordAdapterItemCount)
         }
         super.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        tracker?.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onWordClick(wordModel: WordModel) {
@@ -207,6 +214,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         })
 
         wordAdapter.tracker = tracker
+        tracker?.onRestoreInstanceState(_savedInstanceState)
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
