@@ -19,3 +19,7 @@ const val PROGRESS_MAX = 100
 
 // selection id for SelectionTracker.Builder
 const val MY_SELECTION = "my_selection"
+
+// Save ActionMode state boolean in a bundle
+// WordsFragment onSaveInstanceState
+const val IS_IN_ACTION_MODE = "is_in_action_mode"

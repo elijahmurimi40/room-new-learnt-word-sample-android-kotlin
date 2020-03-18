@@ -38,6 +38,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     private var actionMode: ActionMode? = null
     private var tracker: SelectionTracker<Long>? = null
     private var _savedInstanceState: Bundle? = null
+    private var isInActionMode: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,6 +119,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         tracker?.onSaveInstanceState(outState)
+        outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -201,7 +203,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
                 super.onSelectionChanged()
                 val items = tracker!!.selection.size()
                 if (actionMode == null) {
-                    actionMode = requireActivity().startActionMode(ActionModeCallback())
+                    actionMode = startActionMode()
                 }
                 when(items) {
                     0 -> actionMode?.finish()
@@ -215,6 +217,12 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
         wordAdapter.tracker = tracker
         tracker?.onRestoreInstanceState(_savedInstanceState)
+
+        // start action mode
+        if (_savedInstanceState != null && _savedInstanceState!!.getBoolean(IS_IN_ACTION_MODE)) {
+            actionMode = startActionMode()
+            actionMode?.title = tracker?.selection?.size().toString()
+        }
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
@@ -233,6 +241,10 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
 
+    private fun startActionMode(): ActionMode? {
+        return requireActivity().startActionMode(ActionModeCallback())
+    }
+
     inner class ActionModeCallback : ActionMode.Callback {
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             return when(p1?.itemId) {
@@ -246,6 +258,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         }
 
         override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+            isInActionMode = true
             p0?.menuInflater?.inflate(R.menu.add_edit_menu, p1)
             return true
         }
@@ -255,6 +268,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         }
 
         override fun onDestroyActionMode(p0: ActionMode?) {
+            isInActionMode = false
             tracker!!.clearSelection()
             actionMode = null
         }
