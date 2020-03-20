@@ -90,30 +90,32 @@ class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiff
             }
     }
 
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(p0: CharSequence?): FilterResults {
-                val charString = p0.toString()
+    private val filter = object : Filter() {
+        override fun performFiltering(p0: CharSequence?): FilterResults {
+            val charString = p0.toString()
 
-                wFilteredList = if (charString.isEmpty()) {
-                    wOriginalList
-                } else {
-                    val filteredList = wOriginalList
-                        .filter { HelperFunctions.toLowerCase(it.wordLearned).contains(charString) ||
-                                HelperFunctions.toLowerCase(it.language).contains(charString) ||
-                                HelperFunctions.toLowerCase(it.meaning).contains(charString) }
-                        .toMutableList()
-                    filteredList
-                }
-                val filterResults = FilterResults()
-                filterResults.values = wFilteredList
-                return filterResults
+            wFilteredList = if (charString.isEmpty()) {
+                wOriginalList
+            } else {
+                val filteredList = wOriginalList
+                    .filter { HelperFunctions.toLowerCase(it.wordLearned).contains(charString) ||
+                            HelperFunctions.toLowerCase(it.language).contains(charString) ||
+                            HelperFunctions.toLowerCase(it.meaning).contains(charString) }
+                    .toMutableList()
+                filteredList
             }
-
-            @Suppress("UNCHECKED_CAST")
-            override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                submitList(p1?.values as List<WordModel>)
-            }
+            val filterResults = FilterResults()
+            filterResults.values = wFilteredList
+            return filterResults
         }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+            submitList(p1?.values as List<WordModel>)
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return this.filter
     }
 }

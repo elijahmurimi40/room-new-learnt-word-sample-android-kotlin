@@ -11,7 +11,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.databinding.WordsFragmentBinding
@@ -191,7 +190,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         tracker = SelectionTracker.Builder(
             MY_SELECTION,
             word_items,
-            StableIdKeyProvider(word_items),
+            WordItemKeyProvider(word_items),
             WordsItemDetailsLookup(word_items),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
