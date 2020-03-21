@@ -8,7 +8,7 @@ class WordsItemDetailsLookup(private val recyclerView: RecyclerView) : ItemDetai
     override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
         val view = recyclerView.findChildViewUnder(e.x, e.y)
         if (view != null) {
-            return (recyclerView.getChildViewHolder(view) as WordAdapter.WordViewHolder)
+            return (recyclerView.getChildViewHolder(view) as WordsAdapter.WordViewHolder)
                 .getItemDetails()
         }
         return null

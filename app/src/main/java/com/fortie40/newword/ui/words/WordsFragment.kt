@@ -32,7 +32,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: WordsViewModel
-    private lateinit var wordAdapter: WordAdapter
+    private lateinit var wordAdapter: WordsAdapter
     private lateinit var handler: Handler
     private lateinit var recyclerViewScrollToPosition: Runnable
     private lateinit var wordAdapterItemCount: Runnable
@@ -181,7 +181,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
                     Timber.d("Word: ${word.wordLearned}")
                     Timber.d("***************************************************************")
                 }
-                wordAdapter = WordAdapter(this, words)
+                wordAdapter = WordsAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
                 word_items.adapter = wordAdapter
                 setUpTracker()
@@ -194,7 +194,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         tracker = SelectionTracker.Builder(
             MY_SELECTION,
             word_items,
-            WordItemKeyProvider(word_items),
+            WordsItemKeyProvider(word_items),
             WordsItemDetailsLookup(word_items),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(

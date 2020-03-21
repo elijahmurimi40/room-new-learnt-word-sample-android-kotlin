@@ -17,7 +17,7 @@ import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.roomdatabase.WordModel
 
 
-class WordAdapter(): ListAdapter<WordModel, WordAdapter.WordViewHolder>(WordDiffCallBack()),
+class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDiffCallBack()),
     Filterable {
 
     private lateinit var wOriginalList: List<WordModel>
