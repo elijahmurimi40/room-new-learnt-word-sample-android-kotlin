@@ -13,18 +13,20 @@ import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
+import com.fortie40.newword.contextualmenus.WordsActionModeCallback
 import com.fortie40.newword.databinding.WordsFragmentBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.dialogs.DeleteDialogProgress
 import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.interfaces.IDeleteDialogListener
+import com.fortie40.newword.interfaces.IWordsActionModeListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
-class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
+class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener {
     companion object {
         var tracker: SelectionTracker<Long>? = null
     }
@@ -140,6 +142,20 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
         openDeleteDialogProgress()
     }
 
+    override fun openDeleteDialog() {
+        openDeleteDialog(tracker!!.selection.size())
+    }
+
+    override fun onCreateActionMode() {
+        isInActionMode = true
+    }
+
+    override fun onDestroyActionMode() {
+        isInActionMode = false
+        tracker!!.clearSelection()
+        actionMode = null
+    }
+
     private fun searchWord(p0: String?) {
         if (!::wordAdapter.isInitialized) {
             Timber.d("blank")
@@ -247,35 +263,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     }
 
     private fun startActionMode(): ActionMode? {
-        return requireActivity().startActionMode(ActionModeCallback())
-    }
-
-    inner class ActionModeCallback : ActionMode.Callback {
-        override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-            return when(p1?.itemId) {
-                R.id.action_delete -> {
-                    Timber.d("Selected")
-                    openDeleteDialog(tracker!!.selection.size())
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-            isInActionMode = true
-            p0?.menuInflater?.inflate(R.menu.add_edit_menu, p1)
-            return true
-        }
-
-        override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-            return false
-        }
-
-        override fun onDestroyActionMode(p0: ActionMode?) {
-            isInActionMode = false
-            tracker!!.clearSelection()
-            actionMode = null
-        }
+        return requireActivity().startActionMode(WordsActionModeCallback(this))
     }
 }
