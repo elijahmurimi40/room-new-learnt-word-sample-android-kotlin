@@ -1,4 +1,4 @@
-package com.fortie40.newword.ui.addEditWords
+package com.fortie40.newword.ui.addEditWord
 
 import android.app.Application
 import com.fortie40.newword.roomdatabase.WordDao
