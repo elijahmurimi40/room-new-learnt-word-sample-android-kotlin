@@ -25,6 +25,10 @@ import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
 class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
+    companion object {
+        var tracker: SelectionTracker<Long>? = null
+    }
+
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: WordsViewModel
@@ -32,10 +36,10 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
     private lateinit var handler: Handler
     private lateinit var recyclerViewScrollToPosition: Runnable
     private lateinit var wordAdapterItemCount: Runnable
+    private lateinit var searchView: SearchView
 
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
-    private var tracker: SelectionTracker<Long>? = null
     private var _savedInstanceState: Bundle? = null
     private var isInActionMode: Boolean = false
 
@@ -80,7 +84,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView = menu.findItem(R.id.action_search).actionView as SearchView
         searchView.queryHint = getString(R.string.search_anything)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -201,8 +205,10 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener {
             override fun onSelectionChanged() {
                 super.onSelectionChanged()
                 val items = tracker!!.selection.size()
-                if (actionMode == null) {
+                if (actionMode == null && searchView.isIconified) {
                     actionMode = startActionMode()
+                } else {
+                    Timber.i("No icon")
                 }
                 when(items) {
                     0 -> actionMode?.finish()
