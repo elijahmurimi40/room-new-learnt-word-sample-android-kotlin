@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import com.fortie40.newword.databinding.ActivityMainBinding
 import com.fortie40.newword.dialogs.DeleteDialog
 import com.fortie40.newword.roomdatabase.WordRoomDatabase
-import com.fortie40.newword.ui.words.WordsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -45,11 +44,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!searchView.isIconified || WordsFragment.tracker!!.hasSelection()) {
+        if (!searchView.isIconified) {
             searchView.setQuery("", false)
             searchView.clearFocus()
             searchView.isIconified = true
-            WordsFragment.tracker?.clearSelection()
         } else {
             super.onBackPressed()
         }

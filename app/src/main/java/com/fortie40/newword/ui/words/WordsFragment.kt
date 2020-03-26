@@ -9,9 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.contextualmenus.WordsActionModeCallback
 import com.fortie40.newword.databinding.WordsFragmentBinding
@@ -27,10 +24,6 @@ import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
 class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener {
-    companion object {
-        var tracker: SelectionTracker<Long>? = null
-    }
-
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var viewModel: WordsViewModel
@@ -42,7 +35,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
-    private var _savedInstanceState: Bundle? = null
     private var isInActionMode: Boolean = false
 
     override fun onCreateView(
@@ -62,7 +54,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        _savedInstanceState = savedInstanceState
 
         wordsFragmentBinding.apply {
             this.lifecycleOwner = viewLifecycleOwner
@@ -122,12 +113,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         super.onPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        tracker?.onSaveInstanceState(outState)
-        outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onWordClick(wordModel: WordModel) {
         if (actionMode != null) {
             return
@@ -138,12 +123,16 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
+    override fun onWordLongClick() {
+        Timber.i("I was Long Clicked")
+    }
+
     override fun onDeletePressed() {
         openDeleteDialogProgress()
     }
 
     override fun openDeleteDialog() {
-        openDeleteDialog(tracker!!.selection.size())
+        //openDeleteDialog(tracker!!.selection.size())
     }
 
     override fun onCreateActionMode() {
@@ -152,7 +141,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     override fun onDestroyActionMode() {
         isInActionMode = false
-        tracker!!.clearSelection()
+        //tracker!!.clearSelection()
         actionMode = null
     }
 
@@ -200,50 +189,9 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
                 wordAdapter = WordsAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
                 word_items.adapter = wordAdapter
-                setUpTracker()
                 swipe_to_refresh.isRefreshing = false
             }
         })
-    }
-
-    private fun setUpTracker() {
-        tracker = SelectionTracker.Builder(
-            MY_SELECTION,
-            word_items,
-            WordsItemKeyProvider(word_items),
-            WordsItemDetailsLookup(word_items),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectAnything()
-        ).build()
-
-        tracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-            override fun onSelectionChanged() {
-                super.onSelectionChanged()
-                val items = tracker!!.selection.size()
-                if (actionMode == null && searchView.isIconified) {
-                    actionMode = startActionMode()
-                } else {
-                    Timber.i("No icon")
-                }
-                when(items) {
-                    0 -> actionMode?.finish()
-                    else -> {
-                        actionMode?.title = items.toString()
-                        actionMode?.invalidate()
-                    }
-                }
-            }
-        })
-
-        wordAdapter.tracker = tracker
-        tracker?.onRestoreInstanceState(_savedInstanceState)
-
-        // start action mode
-        if (_savedInstanceState != null && _savedInstanceState!!.getBoolean(IS_IN_ACTION_MODE)) {
-            actionMode = startActionMode()
-            actionMode?.title = tracker?.selection?.size().toString()
-        }
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {

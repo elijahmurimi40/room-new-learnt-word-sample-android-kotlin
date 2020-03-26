@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +21,6 @@ class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDi
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
     private lateinit var clickHandler: IClickListener
-
-    var tracker: SelectionTracker<Long>? = null
 
     constructor(listener: IClickListener, wordList: List<WordModel>): this() {
         clickHandler = listener
@@ -44,22 +40,11 @@ class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDi
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val context = holder.binding.viewDetails.context
-
-        tracker?.let {
-            holder.bind(getItem(position), it.isSelected(position.toLong()))
-            when(it.isSelected(position.toLong())) {
-                true -> {
-                    holder.binding.icon.text = ""
-                    holder.binding.icon.background = context.getDrawable(R.drawable.circle_icon)
-                }
-            }
-        }
+        // val context = holder.binding.viewDetails.context
+        holder.bind(getItem(position))
 
         holder.binding.iClickListener = clickHandler
     }
-
-    override fun getItemId(position: Int): Long = position.toLong()
 
     class WordDiffCallBack: DiffUtil.ItemCallback<WordModel>() {
         override fun areItemsTheSame(oldItem: WordModel, newItem: WordModel): Boolean {
@@ -76,18 +61,10 @@ class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDi
     inner class WordViewHolder(val binding: WordLayoutBinding):
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(wordModel: WordModel, isActivated: Boolean = false) {
+        fun bind(wordModel: WordModel) {
             binding.wordM = wordModel
-            itemView.isActivated = isActivated
             binding.executePendingBindings()
         }
-
-        fun getItemDetails() : ItemDetailsLookup.ItemDetails<Long> =
-            object : ItemDetailsLookup.ItemDetails<Long>() {
-                override fun getSelectionKey(): Long? = itemId
-
-                override fun getPosition(): Int = adapterPosition
-            }
     }
 
     private val filter = object : Filter() {
