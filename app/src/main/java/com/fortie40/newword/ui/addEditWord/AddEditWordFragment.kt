@@ -18,6 +18,9 @@ import com.fortie40.newword.interfaces.IDeleteDialogListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_word_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
@@ -120,6 +123,9 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
     }
 
     override fun onDeletePressed() {
+        CoroutineScope(IO).launch {
+            viewModel.deleteWord(wordModel!!)
+        }
         HelperFunctions.showShortSnackBar(requireView(), getString(R.string.successfully_deleted))
         requireActivity().onBackPressed()
     }

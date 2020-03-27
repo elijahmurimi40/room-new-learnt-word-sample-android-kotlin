@@ -1,10 +1,7 @@
 package com.fortie40.newword.roomdatabase
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface WordDao {
@@ -18,8 +15,11 @@ interface WordDao {
     suspend fun updateWord(wordLearned: String, language: String, meaning: String, id: Int)
 
     @Query("DELETE FROM words WHERE wordId = :id")
-    suspend fun deleteWord(id: Int)
+    suspend fun deleteWordById(id: Int)
 
     @Query("DELETE FROM words")
     suspend fun deleteAllWords()
+
+    @Delete
+    suspend fun deleteWord(wordModel: WordModel)
 }

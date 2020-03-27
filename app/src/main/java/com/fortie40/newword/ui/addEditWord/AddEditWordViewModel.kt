@@ -42,6 +42,11 @@ class AddEditWordViewModel(application: Application) : AndroidViewModel(applicat
         repository.updateWord(wordLearned, language, meaning, id)
     }
 
+    // delete word
+    suspend fun deleteWord(wordModel: WordModel) {
+        repository.deleteWord(wordModel)
+    }
+
     // save word on click
     fun saveWordOnClick() {
         if (validateWord() or validateLanguage() or validateMeaning()) {

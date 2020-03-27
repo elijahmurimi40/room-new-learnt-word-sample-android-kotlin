@@ -85,8 +85,8 @@ class WordRoomDatabaseTest {
     fun deleteWord() = runBlocking {
         insertWords()
 
-        wordDao.deleteWord(1)
-        wordDao.deleteWord(2)
+        wordDao.deleteWordById(1)
+        wordDao.deleteWordById(2)
         val w = wordDao.getAllWords()
         w.observeForever {  }
         val v = w.value
