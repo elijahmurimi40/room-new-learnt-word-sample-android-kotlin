@@ -28,10 +28,6 @@ class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDi
         wFilteredList = wordList
     }
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val wordLayoutBinding: WordLayoutBinding = DataBindingUtil.inflate(layoutInflater,

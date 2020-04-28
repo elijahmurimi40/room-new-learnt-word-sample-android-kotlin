@@ -59,7 +59,7 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
                 dView.items.text = getString(R.string._1_1, i, numberOfItemsToDelete)
                 dView.progress_bar.progress = progress
             }
-            delay(3000)
+            delay(800)
         }
         delay(500)
     }
