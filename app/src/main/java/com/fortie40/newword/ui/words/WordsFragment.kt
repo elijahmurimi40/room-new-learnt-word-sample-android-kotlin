@@ -41,6 +41,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     private var actionMode: ActionMode? = null
     private var isInActionMode: Boolean = false
     private var tracker: SelectionTracker<Long>? = null
+    private var _savedInstanceState: Bundle? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +60,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        _savedInstanceState = savedInstanceState
 
         wordsFragmentBinding.apply {
             this.lifecycleOwner = viewLifecycleOwner
@@ -78,6 +80,11 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         )
         viewModel = ViewModelProviders.of(this).get(WordsViewModel::class.java)
         getWords()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        tracker?.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -146,7 +153,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     override fun onDestroyActionMode() {
         isInActionMode = false
-        //tracker!!.clearSelection()
+        tracker!!.clearSelection()
         actionMode = null
     }
 
@@ -210,7 +217,26 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         ).withSelectionPredicate(
             SelectionPredicates.createSelectAnything()
         ).build()
+
+        tracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+                val items = tracker!!.selection.size()
+                if (actionMode == null) {
+                    actionMode = startActionMode()
+                }
+                when (items) {
+                    0 -> actionMode?.finish()
+                    else -> {
+                        actionMode?.title = items.toString()
+                        actionMode?.invalidate()
+                    }
+                }
+            }
+        })
+
         wordAdapter.tracker = tracker
+        tracker?.onRestoreInstanceState(_savedInstanceState)
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
