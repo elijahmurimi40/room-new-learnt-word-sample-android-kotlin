@@ -9,6 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.contextualmenus.WordsActionModeCallback
 import com.fortie40.newword.databinding.WordsFragmentBinding
@@ -36,6 +40,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     private var isInitialized: Boolean = false
     private var actionMode: ActionMode? = null
     private var isInActionMode: Boolean = false
+    private var tracker: SelectionTracker<Long>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -189,9 +194,23 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
                 wordAdapter = WordsAdapter(this, words)
                 words.let { wordAdapter.submitList(it) }
                 word_items.adapter = wordAdapter
+                setUpTracker()
                 swipe_to_refresh.isRefreshing = false
             }
         })
+    }
+
+    private fun setUpTracker() {
+        tracker = SelectionTracker.Builder(
+            MY_SELECTION,
+            word_items,
+            StableIdKeyProvider(word_items),
+            WordsItemDetailsLookup(word_items),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+        wordAdapter.tracker = tracker
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
