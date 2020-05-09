@@ -84,6 +84,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     override fun onSaveInstanceState(outState: Bundle) {
         tracker?.onSaveInstanceState(outState)
+        outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -237,6 +238,12 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
         wordAdapter.tracker = tracker
         tracker?.onRestoreInstanceState(_savedInstanceState)
+
+        // start action mode
+        if (_savedInstanceState != null && _savedInstanceState!!.getBoolean(IS_IN_ACTION_MODE)) {
+            actionMode = startActionMode()
+            actionMode?.title = tracker?.selection?.size().toString()
+        }
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
