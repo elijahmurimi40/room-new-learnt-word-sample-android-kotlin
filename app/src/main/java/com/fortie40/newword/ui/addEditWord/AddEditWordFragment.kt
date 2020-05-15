@@ -7,8 +7,8 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.fortie40.newword.DELETE_DIALOG
 import com.fortie40.newword.R
 import com.fortie40.newword.databinding.AddEditWordFragmentBinding
@@ -26,10 +26,10 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
 
     private lateinit var addEditWordFragmentBinding: AddEditWordFragmentBinding
     private lateinit var root: View
-    private lateinit var viewModel: AddEditWordViewModel
     private lateinit var imm: InputMethodManager
 
     private var wordModel: WordModel? = null
+    private val viewModel by viewModels<AddEditWordViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +64,6 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
         //close keyboard
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
-        viewModel = ViewModelProviders.of(this).get(AddEditWordViewModel::class.java)
         addEditWordFragmentBinding.apply {
             this.lifecycleOwner = viewLifecycleOwner
             this.addEditWordViewModel = viewModel

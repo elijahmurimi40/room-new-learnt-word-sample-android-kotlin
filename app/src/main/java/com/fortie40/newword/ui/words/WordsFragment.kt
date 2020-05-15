@@ -5,8 +5,8 @@ import android.os.Handler
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.selection.SelectionPredicates
@@ -30,7 +30,6 @@ import timber.log.Timber
 class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener {
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
-    private lateinit var viewModel: WordsViewModel
     private lateinit var wordAdapter: WordsAdapter
     private lateinit var handler: Handler
     private lateinit var recyclerViewScrollToPosition: Runnable
@@ -42,6 +41,8 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     private var isInActionMode: Boolean = false
     private var tracker: SelectionTracker<Long>? = null
     private var _savedInstanceState: Bundle? = null
+
+    private val viewModel by viewModels<WordsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +79,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         addNewWord.setOnClickListener(
             Navigation.createNavigateOnClickListener(R.id.action_wordsFragment_to_addEditWordFragment)
         )
-        viewModel = ViewModelProviders.of(this).get(WordsViewModel::class.java)
         getWords()
     }
 
