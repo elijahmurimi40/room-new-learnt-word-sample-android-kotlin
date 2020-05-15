@@ -1,5 +1,7 @@
 # Room New Learnt Word Android Kotlin
 
+Minimum Android Version 5.0 (Lollipop)
+
 ## License
 
 MIT License
