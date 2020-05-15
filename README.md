@@ -1,3 +1,7 @@
+<p align="center"><img 
+	src="https://user-images.githubusercontent.com/25055256/82092580-38639300-9702-11ea-9d25-092ea08af8e2.png" 
+	alt="Logo" width="40px" height="40px" /></p>
+  
 # Room New Learnt Word Android Kotlin
 
 Minimum Android Version 5.0 (Lollipop)
