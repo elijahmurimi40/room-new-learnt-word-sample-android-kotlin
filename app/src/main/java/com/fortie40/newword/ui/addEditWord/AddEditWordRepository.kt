@@ -9,7 +9,7 @@ class AddEditWordRepository() {
     private lateinit var wordDao: WordDao
 
     constructor(application: Application): this() {
-        val database = WordRoomDatabase.getDataBase(application)
+        val database = WordRoomDatabase(application)
         wordDao = database.wordDao()
     }
 

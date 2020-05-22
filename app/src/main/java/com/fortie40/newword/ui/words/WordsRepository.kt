@@ -11,7 +11,7 @@ class WordsRepository() {
     private lateinit var allWords: LiveData<List<WordModel>>
 
     constructor(application: Application): this() {
-        val database = WordRoomDatabase.getDataBase(application)
+        val database = WordRoomDatabase(application)
         wordDao = database.wordDao()
         allWords = wordDao.getAllWords()
     }

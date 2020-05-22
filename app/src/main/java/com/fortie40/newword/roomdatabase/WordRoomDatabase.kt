@@ -12,20 +12,17 @@ abstract class WordRoomDatabase: RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: WordRoomDatabase? = null
+        private val LOCK = Any()
 
-        fun getDataBase(context: Context): WordRoomDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext, WordRoomDatabase::class.java,
-                    "words_database"
-                ).fallbackToDestructiveMigration().build()
-                INSTANCE = instance
-                return instance
+        operator fun invoke(context: Context) = INSTANCE ?: synchronized(LOCK) {
+            INSTANCE ?: getDataBase(context).also {
+                INSTANCE = it
             }
         }
+
+        private fun getDataBase(context: Context) = Room.databaseBuilder(
+            context.applicationContext, WordRoomDatabase::class.java,
+            "words_database"
+        ).fallbackToDestructiveMigration().build()
     }
 }

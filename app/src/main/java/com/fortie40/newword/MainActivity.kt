@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        WordRoomDatabase.getDataBase(application).close()
         DeleteDialog.deleteDialogListener = null
         super.onStop()
     }
