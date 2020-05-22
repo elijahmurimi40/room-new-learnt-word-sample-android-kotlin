@@ -110,10 +110,13 @@ class AddEditWordFragment : Fragment(), IDeleteDialogListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_delete -> openDeleteDialog()
+        return when (item.itemId) {
+            R.id.action_delete -> {
+                openDeleteDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
