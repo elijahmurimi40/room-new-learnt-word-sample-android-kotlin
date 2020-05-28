@@ -21,7 +21,7 @@ class WordsAdapter(listener: IClickListener):
     ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDiffCallBack()),
     Filterable {
 
-    private lateinit var wOriginalList: List<WordModel>
+    lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
 
     private val clickHandler: IClickListener = listener
@@ -117,6 +117,5 @@ class WordsAdapter(listener: IClickListener):
 
     fun setFilterWords(words: List<WordModel>) {
         wOriginalList = words
-        wFilteredList = words
     }
 }

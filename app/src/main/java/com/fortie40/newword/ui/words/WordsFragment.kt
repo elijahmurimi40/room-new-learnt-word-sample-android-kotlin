@@ -32,7 +32,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     private lateinit var wordAdapter: WordsAdapter
     private lateinit var handler: Handler
     private lateinit var recyclerViewScrollToPosition: Runnable
-    private lateinit var wordAdapterItemCount: Runnable
     private lateinit var searchView: SearchView
 
     private var isInitialized: Boolean = false
@@ -120,7 +119,6 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     override fun onPause() {
         if (isInitialized) {
             handler.removeCallbacks(recyclerViewScrollToPosition)
-            handler.removeCallbacks(wordAdapterItemCount)
         }
         super.onPause()
     }
@@ -158,29 +156,26 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     }
 
     private fun searchWord(p0: String?) {
-        if (!::wordAdapter.isInitialized) {
-            Timber.d("blank")
-            no_words.visibility = View.VISIBLE
+        if (wordAdapter.wOriginalList.isEmpty()) {
             when(p0) {
                 "" -> no_words.text = getString(R.string.no_words)
                 else -> no_words.text = getString(R.string.no_results_found, p0)
             }
-        } else {
-            wordAdapter.filter.filter(HelperFunctions.toLowerCase(p0!!))
+            return
+        }
+
+        wordAdapter.filter.filter(HelperFunctions.toLowerCase(p0!!)) {
             isInitialized = true
             handler = Handler()
             recyclerViewScrollToPosition = Runnable { word_items.scrollToPosition(0) }
-            wordAdapterItemCount = Runnable {
-                when(wordAdapter.itemCount) {
-                    0 -> {
-                        no_words.visibility = View.VISIBLE
-                        no_words.text = getString(R.string.no_results_found, p0)
-                    }
-                    else -> no_words.visibility = View.GONE
+            when(it) {
+                0 -> {
+                    no_words.visibility = View.VISIBLE
+                    no_words.text = getString(R.string.no_results_found, p0)
                 }
+                else -> no_words.visibility = View.GONE
             }
             handler.postDelayed(recyclerViewScrollToPosition, 300)
-            handler.postDelayed(wordAdapterItemCount, 300)
         }
     }
 
