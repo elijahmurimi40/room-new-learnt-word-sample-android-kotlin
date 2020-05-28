@@ -17,20 +17,16 @@ import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.roomdatabase.WordModel
 
 
-class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDiffCallBack()),
+class WordsAdapter(listener: IClickListener):
+    ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDiffCallBack()),
     Filterable {
 
     private lateinit var wOriginalList: List<WordModel>
     private lateinit var wFilteredList: List<WordModel>
-    private lateinit var clickHandler: IClickListener
+
+    private val clickHandler: IClickListener = listener
 
     var tracker: SelectionTracker<Long>? = null
-
-    constructor(listener: IClickListener, wordList: List<WordModel>): this() {
-        clickHandler = listener
-        wOriginalList = wordList
-        wFilteredList = wordList
-    }
 
     init {
         setHasStableIds(true)
@@ -117,5 +113,10 @@ class WordsAdapter(): ListAdapter<WordModel, WordsAdapter.WordViewHolder>(WordDi
 
     override fun getFilter(): Filter {
         return this.filter
+    }
+
+    fun setFilterWords(words: List<WordModel>) {
+        wOriginalList = words
+        wFilteredList = words
     }
 }

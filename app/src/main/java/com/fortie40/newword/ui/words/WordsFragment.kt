@@ -187,6 +187,9 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
 
     private fun getWords() {
         swipe_to_refresh.isRefreshing = true
+        wordAdapter = WordsAdapter(this)
+        word_items.adapter = wordAdapter
+        setUpTracker()
         viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
             if (words.isEmpty()) {
                 no_words.visibility = View.VISIBLE
@@ -199,12 +202,11 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
                     Timber.d("Word: ${word.wordLearned}")
                     Timber.d("***************************************************************")
                 }
-                wordAdapter = WordsAdapter(this, words)
-                words.let { wordAdapter.submitList(it) }
-                word_items.adapter = wordAdapter
-                setUpTracker()
                 swipe_to_refresh.isRefreshing = false
             }
+            words.let { wordAdapter.submitList(it) }
+            wordAdapter.setFilterWords(words)
+            Timber.d("${words.size}")
         })
     }
 
@@ -212,7 +214,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         tracker = SelectionTracker.Builder(
             MY_SELECTION,
             word_items,
-            StableIdKeyProvider(word_items),
+            WordsItemKeyProvider(word_items),
             WordsItemDetailsLookup(word_items),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
