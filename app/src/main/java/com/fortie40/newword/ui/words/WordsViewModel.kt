@@ -3,8 +3,9 @@ package com.fortie40.newword.ui.words
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
 import com.fortie40.newword.roomdatabase.WordModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class WordsViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,7 +17,7 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteAllWords() {
-        viewModelScope.launch {
+        CoroutineScope(IO).launch {
             wordsRepository.deleteAllWords()
         }
     }

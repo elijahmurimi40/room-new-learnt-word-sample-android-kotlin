@@ -11,7 +11,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.contextualmenus.WordsActionModeCallback
@@ -141,7 +140,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     }
 
     override fun onDeletePressed() {
-        openDeleteDialogProgress()
+        openDeleteDialogProgress(wordAdapter.itemCount)
     }
 
     override fun openDeleteDialog() {
@@ -256,10 +255,10 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         deleteDialog.show(requireActivity().supportFragmentManager, DELETE_DIALOG)
     }
 
-    private fun openDeleteDialogProgress() {
+    private fun openDeleteDialogProgress(numberOfItems: Int) {
         val deleteDialogProgress = DeleteDialogProgress()
         val args = Bundle()
-        args.putInt(NUMBER_OF_ITEMS_TO_DELETE, 8)
+        args.putInt(NUMBER_OF_ITEMS_TO_DELETE, numberOfItems)
         deleteDialogProgress.arguments = args
         deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }

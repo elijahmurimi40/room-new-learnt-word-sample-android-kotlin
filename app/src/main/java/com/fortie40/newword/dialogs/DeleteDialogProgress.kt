@@ -51,7 +51,7 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
     }
 
     private suspend fun deleteWords() {
-        delay(500)
+        delay(200)
         for (i in 1..numberOfItemsToDelete) {
             val progress = ((i.toFloat() / numberOfItemsToDelete) * 100).toInt()
             withContext(Main) {
@@ -59,9 +59,9 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
                 dView.items.text = getString(R.string._1_1, i, numberOfItemsToDelete)
                 dView.progress_bar.progress = progress
             }
-            delay(800)
+            delay(500)
         }
-        delay(500)
+        delay(300)
     }
 
     private suspend fun closeDialog() {
