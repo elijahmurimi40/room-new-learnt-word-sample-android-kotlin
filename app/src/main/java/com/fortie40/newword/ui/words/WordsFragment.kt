@@ -20,13 +20,16 @@ import com.fortie40.newword.dialogs.DeleteDialogProgress
 import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.interfaces.IDeleteDialogListener
+import com.fortie40.newword.interfaces.IDeleteWords
 import com.fortie40.newword.interfaces.IWordsActionModeListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.words_fragment.*
 import timber.log.Timber
 
-class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener {
+class WordsFragment :
+    Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener, IDeleteWords {
+
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
     private lateinit var wordAdapter: WordsAdapter
@@ -114,6 +117,7 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     override fun onResume() {
         super.onResume()
         DeleteDialog.deleteDialogListener = this
+        DeleteDialogProgress.deleteWordsListener = this
     }
 
     override fun onPause() {
@@ -138,11 +142,15 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
     }
 
     override fun onDeletePressed() {
-        openDeleteDialogProgress(wordAdapter.itemCount)
+        if (actionMode != null) {
+            openDeleteDialogProgress(tracker!!.selection.size(), DELETE_ICON_PRESSED)
+        } else {
+            openDeleteDialogProgress(wordAdapter.itemCount, DELETE_ALL_WORDS)
+        }
     }
 
     override fun openDeleteDialog() {
-        //openDeleteDialog(tracker!!.selection.size())
+        openDeleteDialog(tracker!!.selection.size())
     }
 
     override fun onCreateActionMode() {
@@ -153,6 +161,15 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         isInActionMode = false
         tracker!!.clearSelection()
         actionMode = null
+    }
+
+    override suspend fun deleteWords(type: String) {
+        if (type == DELETE_ICON_PRESSED) {
+            Timber.d("Icon pressed of action mode")
+        } else {
+            Timber.d("delete All Words")
+            viewModel.deleteAllWords()
+        }
     }
 
     private fun searchWord(p0: String?) {
@@ -250,10 +267,11 @@ class WordsFragment : Fragment(), IClickListener, IDeleteDialogListener, IWordsA
         deleteDialog.show(requireActivity().supportFragmentManager, DELETE_DIALOG)
     }
 
-    private fun openDeleteDialogProgress(numberOfItems: Int) {
+    private fun openDeleteDialogProgress(numberOfItems: Int, type: String) {
         val deleteDialogProgress = DeleteDialogProgress()
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS_TO_DELETE, numberOfItems)
+        args.putString(TYPE_OF_DELETION, type)
         deleteDialogProgress.arguments = args
         deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
