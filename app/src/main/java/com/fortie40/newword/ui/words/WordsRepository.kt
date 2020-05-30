@@ -20,6 +20,10 @@ class WordsRepository() {
         return allWords
     }
 
+    suspend fun deleteWordById(id: Int) {
+        wordDao.deleteWordById(id)
+    }
+
     suspend fun deleteAllWords() {
         wordDao.deleteAllWords()
     }
