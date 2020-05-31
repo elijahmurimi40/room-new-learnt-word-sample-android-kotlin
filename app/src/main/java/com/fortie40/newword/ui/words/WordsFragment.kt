@@ -25,7 +25,11 @@ import com.fortie40.newword.interfaces.IDeleteWords
 import com.fortie40.newword.interfaces.IWordsActionModeListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.delete_dialog_progress.view.*
 import kotlinx.android.synthetic.main.words_fragment.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class WordsFragment :
@@ -43,6 +47,8 @@ class WordsFragment :
     private var isInActionMode: Boolean = false
     private var tracker: SelectionTracker<Long>? = null
     private var _savedInstanceState: Bundle? = null
+
+    private var typeOfDeletion: String = ""
 
     private val viewModel by viewModels<WordsViewModel>()
 
@@ -164,13 +170,18 @@ class WordsFragment :
         actionMode = null
     }
 
-    override suspend fun deleteWords(type: String) {
-        if (type == DELETE_ICON_PRESSED) {
-            Timber.d("Icon pressed of action mode")
-        } else {
-            Timber.d("delete All Words")
-            viewModel.deleteAllWords()
+    override suspend fun deleteWords(view: View, n: Int) {
+        delay(200)
+        for (i in 1..n) {
+            val progress = ((i.toFloat() / n) * 100).toInt()
+            withContext(Main) {
+                view.percentage.text = getString(R.string._0, progress)
+                view.items.text = getString(R.string._1_1, i, n)
+                view.progress_bar.progress = progress
+            }
+            delay(500)
         }
+        delay(300)
     }
 
     private fun searchWord(p0: String?) {
@@ -272,7 +283,7 @@ class WordsFragment :
         val deleteDialogProgress = DeleteDialogProgress()
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS_TO_DELETE, numberOfItems)
-        args.putString(TYPE_OF_DELETION, type)
+        typeOfDeletion = type
         deleteDialogProgress.arguments = args
         deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
