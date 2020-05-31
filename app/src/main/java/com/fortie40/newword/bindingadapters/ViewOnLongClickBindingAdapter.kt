@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 fun onLongCLick(view: View, onLongClick: () -> Unit) {
     view.setOnLongClickListener {
         onLongClick.invoke()
+        it.isHapticFeedbackEnabled = false
         true
     }
 }
