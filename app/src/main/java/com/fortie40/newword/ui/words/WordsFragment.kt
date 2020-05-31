@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.contextualmenus.WordsActionModeCallback
@@ -225,7 +226,7 @@ class WordsFragment :
         tracker = SelectionTracker.Builder(
             MY_SELECTION,
             word_items,
-            WordsItemKeyProvider(word_items),
+            StableIdKeyProvider(word_items),
             WordsItemDetailsLookup(word_items),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
