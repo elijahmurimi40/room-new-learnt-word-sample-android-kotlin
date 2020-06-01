@@ -11,7 +11,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import com.fortie40.newword.*
 import com.fortie40.newword.contextualmenus.WordsActionModeCallback
@@ -172,16 +171,41 @@ class WordsFragment :
 
     override suspend fun deleteWords(view: View, n: Int) {
         delay(200)
+        val wordIdList = getWordIdList()
         for (i in 1..n) {
             val progress = ((i.toFloat() / n) * 100).toInt()
+            val wordId = wordIdList[i - 1]
+            viewModel.deleteWordById(wordId)
             withContext(Main) {
                 view.percentage.text = getString(R.string._0, progress)
                 view.items.text = getString(R.string._1_1, i, n)
                 view.progress_bar.progress = progress
+
+                isInActionMode = false
+                tracker?.clearSelection()
+                actionMode = null
             }
             delay(500)
         }
         delay(300)
+    }
+
+    private fun getWordIdList(): List<Int> {
+        val wm = viewModel.allWords.value!!
+        var wordId: Int
+        val list = ArrayList<Int>()
+        if (typeOfDeletion == DELETE_ICON_PRESSED) {
+            tracker!!.selection.map {
+                wordId = wm[it.toInt()].wordId!!
+                list.add(wordId)
+            }
+        } else {
+            wm.map {
+                wordId = it.wordId!!
+                list.add(wordId)
+            }
+        }
+        return list
     }
 
     private fun searchWord(p0: String?) {
@@ -237,7 +261,7 @@ class WordsFragment :
         tracker = SelectionTracker.Builder(
             MY_SELECTION,
             word_items,
-            StableIdKeyProvider(word_items),
+            WordsItemKeyProvider(word_items),
             WordsItemDetailsLookup(word_items),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(

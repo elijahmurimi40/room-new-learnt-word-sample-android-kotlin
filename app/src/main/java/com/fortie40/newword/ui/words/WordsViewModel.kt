@@ -21,10 +21,4 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
             wordsRepository.deleteWordById(id)
         }
     }
-
-    fun deleteAllWords() {
-        CoroutineScope(IO).launch {
-            wordsRepository.deleteAllWords()
-        }
-    }
 }
