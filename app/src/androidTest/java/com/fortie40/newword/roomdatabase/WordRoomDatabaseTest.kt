@@ -59,6 +59,18 @@ class WordRoomDatabaseTest {
         w.removeObserver {  }
     }
 
+    // get word by id
+    @Test
+    fun getWordById() = runBlocking {
+        insertWords()
+
+        val wordOne = wordDao.getWordById(1)
+        val wordTwo = wordDao.getWordById(2)
+
+        assertEquals("elixir", wordOne.wordLearned)
+        assertEquals("zopl", wordTwo.wordLearned)
+    }
+
     // update word
     @Test
     fun updateWord() = runBlocking {
