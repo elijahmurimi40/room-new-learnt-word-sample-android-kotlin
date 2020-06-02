@@ -164,9 +164,7 @@ class WordsFragment :
     }
 
     override fun onDestroyActionMode() {
-        isInActionMode = false
-        tracker!!.clearSelection()
-        actionMode = null
+        resetTrackerAndActionMode()
     }
 
     override suspend fun deleteWords(view: View, n: Int) {
@@ -181,9 +179,7 @@ class WordsFragment :
                 view.items.text = getString(R.string._1_1, i, n)
                 view.progress_bar.progress = progress
 
-                isInActionMode = false
-                tracker?.clearSelection()
-                actionMode = null
+                resetTrackerAndActionMode()
             }
             delay(500)
         }
@@ -293,6 +289,12 @@ class WordsFragment :
             actionMode = startActionMode()
             actionMode?.title = tracker?.selection?.size().toString()
         }
+    }
+
+    private fun resetTrackerAndActionMode() {
+        isInActionMode = false
+        tracker!!.clearSelection()
+        actionMode = null
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
