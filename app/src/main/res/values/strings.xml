@@ -13,6 +13,9 @@
     <!-- add edit menu -->
     <string name="delete">Delete</string>
 
+    <!-- context_menu -->
+    <string name="delete_word_menu">Delete Word</string>
+
     <!-- word fragment layout -->
     <string name="add_a_new_word">add a new word button</string>
     <string name="all_words_screen">all words screen</string>

@@ -89,6 +89,21 @@ class WordsFragment :
         getWords()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        registerForContextMenu(word_items)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater = activity?.menuInflater
+        inflater?.inflate(R.menu.contextual_menu, menu)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         tracker?.onSaveInstanceState(outState)
         outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
@@ -133,6 +148,11 @@ class WordsFragment :
         super.onPause()
     }
 
+    override fun onDestroy() {
+        unregisterForContextMenu(word_items)
+        super.onDestroy()
+    }
+
     override fun onWordClick(wordModel: WordModel) {
         if (actionMode != null) {
             return
@@ -145,6 +165,9 @@ class WordsFragment :
 
     override fun onWordLongClick() {
         Timber.i("I was Long Clicked")
+        if (!searchView.isIconified) {
+            word_items.showContextMenu()
+        }
     }
 
     override fun onDeletePressed() {
@@ -266,16 +289,18 @@ class WordsFragment :
 
         tracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
             override fun onSelectionChanged() {
-                super.onSelectionChanged()
-                val items = tracker!!.selection.size()
-                if (actionMode == null) {
-                    actionMode = startActionMode()
-                }
-                when (items) {
-                    0 -> actionMode?.finish()
-                    else -> {
-                        actionMode?.title = items.toString()
-                        actionMode?.invalidate()
+                if (searchView.isIconified) {
+                    super.onSelectionChanged()
+                    val items = tracker!!.selection.size()
+                    if (actionMode == null) {
+                        actionMode = startActionMode()
+                    }
+                    when (items) {
+                        0 -> actionMode?.finish()
+                        else -> {
+                            actionMode?.title = items.toString()
+                            actionMode?.invalidate()
+                        }
                     }
                 }
             }
