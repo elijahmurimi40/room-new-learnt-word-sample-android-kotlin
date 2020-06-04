@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fortie40.newword.databinding.ActivityMainBinding
 import com.fortie40.newword.dialogs.DeleteDialog
+import com.fortie40.newword.ui.words.WordsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -40,6 +41,12 @@ class MainActivity : AppCompatActivity() {
         searchView.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
         searchView.maxWidth = Integer.MAX_VALUE
         return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onContextMenuClosed(menu: Menu) {
+        super.onContextMenuClosed(menu)
+        WordsFragment.resetTrackerAndActionMode()
+        Timber.d("Closed")
     }
 
     override fun onBackPressed() {

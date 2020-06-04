@@ -42,14 +42,23 @@ class WordsFragment :
     private lateinit var searchView: SearchView
 
     private var isInitialized: Boolean = false
-    private var actionMode: ActionMode? = null
-    private var isInActionMode: Boolean = false
-    private var tracker: SelectionTracker<Long>? = null
     private var _savedInstanceState: Bundle? = null
 
     private var typeOfDeletion: String = ""
 
     private val viewModel by viewModels<WordsViewModel>()
+
+    companion object {
+        private var isInActionMode: Boolean = false
+        private var tracker: SelectionTracker<Long>? = null
+        private var actionMode: ActionMode? = null
+
+        fun resetTrackerAndActionMode() {
+            isInActionMode = false
+            tracker!!.clearSelection()
+            actionMode = null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -330,12 +339,6 @@ class WordsFragment :
             actionMode = startActionMode()
             actionMode?.title = tracker?.selection?.size().toString()
         }
-    }
-
-    private fun resetTrackerAndActionMode() {
-        isInActionMode = false
-        tracker!!.clearSelection()
-        actionMode = null
     }
 
     private fun openDeleteDialog(numberOfItems: Int) {
