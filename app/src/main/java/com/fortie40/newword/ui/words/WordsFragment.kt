@@ -154,10 +154,17 @@ class WordsFragment :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.delete_all_words -> openDeleteDialog(wordAdapter.itemCount)
+        return when(item.itemId) {
+            R.id.delete_all_words -> {
+                if (wordAdapter.itemCount == 0) {
+                    HelperFunctions.showShortSnackBar(requireView(), getString(R.string.no_words))
+                } else {
+                    openDeleteDialog(wordAdapter.itemCount)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
