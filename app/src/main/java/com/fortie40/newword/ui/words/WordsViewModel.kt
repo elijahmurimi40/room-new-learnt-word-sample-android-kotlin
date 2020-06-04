@@ -12,6 +12,8 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     private val wordsRepository: WordsRepository = WordsRepository(application)
     val allWords: LiveData<List<WordModel>>
 
+    var oneWordId: Int = 0
+
     init {
         allWords = wordsRepository.getAllWords()
     }

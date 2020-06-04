@@ -104,6 +104,17 @@ class WordsFragment :
         inflater?.inflate(R.menu.contextual_menu, menu)
     }
 
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_word -> {
+                Timber.d("I was clicked")
+                openDeleteDialog(getString(R.string.items_to_delete).toInt())
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         tracker?.onSaveInstanceState(outState)
         outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
@@ -148,11 +159,6 @@ class WordsFragment :
         super.onPause()
     }
 
-    override fun onDestroy() {
-        unregisterForContextMenu(word_items)
-        super.onDestroy()
-    }
-
     override fun onWordClick(wordModel: WordModel) {
         if (actionMode != null) {
             return
@@ -163,16 +169,20 @@ class WordsFragment :
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
-    override fun onWordLongClick() {
+    override fun onWordLongClick(id: Int) {
         Timber.i("I was Long Clicked")
         if (!searchView.isIconified) {
             word_items.showContextMenu()
+            viewModel.oneWordId = id
+            Timber.d("$id")
         }
     }
 
     override fun onDeletePressed() {
         if (actionMode != null) {
             openDeleteDialogProgress(tracker!!.selection.size(), DELETE_ICON_PRESSED)
+        } else if (!searchView.isIconified) {
+            openDeleteDialogProgress(getString(R.string.items_to_delete).toInt(), DELETE_ONE_WORD)
         } else {
             openDeleteDialogProgress(wordAdapter.itemCount, DELETE_ALL_WORDS)
         }
@@ -213,15 +223,21 @@ class WordsFragment :
         val wm = viewModel.allWords.value!!
         var wordId: Int
         val list = ArrayList<Int>()
-        if (typeOfDeletion == DELETE_ICON_PRESSED) {
-            tracker!!.selection.map {
-                wordId = wm[it.toInt()].wordId!!
-                list.add(wordId)
+        when (typeOfDeletion) {
+            DELETE_ICON_PRESSED -> {
+                tracker!!.selection.map {
+                    wordId = wm[it.toInt()].wordId!!
+                    list.add(wordId)
+                }
             }
-        } else {
-            wm.map {
-                wordId = it.wordId!!
-                list.add(wordId)
+            DELETE_ALL_WORDS -> {
+                wm.map {
+                    wordId = it.wordId!!
+                    list.add(wordId)
+                }
+            }
+            else -> {
+                list.add(viewModel.oneWordId)
             }
         }
         return list

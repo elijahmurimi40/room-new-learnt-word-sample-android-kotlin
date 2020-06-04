@@ -24,11 +24,11 @@ const val MY_SELECTION = "my_selection"
 // WordsFragment onSaveInstanceState
 const val IS_IN_ACTION_MODE = "is_in_action_mode"
 
-// Type of deletion happening
-const val TYPE_OF_DELETION = "type_of_deletion"
-
 // Send string from WordsFragment to DeleteDialogProgress when delete icon is pressed
 const val DELETE_ICON_PRESSED = "delete_icon_pressed"
 
 // String from WordsFragment to DeleteDialogProgress when deleting all words
 const val DELETE_ALL_WORDS = "delete_all_words"
+
+// String for deleting one word onContextItemSelected
+const val DELETE_ONE_WORD = "delete_one_word"

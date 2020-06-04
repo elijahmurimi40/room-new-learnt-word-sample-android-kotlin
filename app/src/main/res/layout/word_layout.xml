@@ -32,7 +32,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{() -> iClickListener.onWordClick(wordM)}"
-            app:onLongClick="@{() -> iClickListener.onWordLongClick()}">
+            app:onLongClick="@{() -> iClickListener.onWordLongClick(wordM.wordId)}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
