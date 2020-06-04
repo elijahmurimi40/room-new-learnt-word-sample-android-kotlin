@@ -26,10 +26,10 @@ import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.delete_dialog_progress.view.*
 import kotlinx.android.synthetic.main.words_fragment.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.lang.Runnable
 
 class WordsFragment :
     Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener, IDeleteWords {
@@ -43,7 +43,6 @@ class WordsFragment :
 
     private var isInitialized: Boolean = false
     private var _savedInstanceState: Bundle? = null
-
     private var typeOfDeletion: String = ""
 
     private val viewModel by viewModels<WordsViewModel>()
@@ -96,6 +95,12 @@ class WordsFragment :
             Navigation.createNavigateOnClickListener(R.id.action_wordsFragment_to_addEditWordFragment)
         )
         getWords()
+
+        viewModel.progress.observe(viewLifecycleOwner, Observer {
+            Timber.d("Progreee is $it")
+            DeleteDialogProgress.dView.percentage.text = getString(R.string._0, it)
+            DeleteDialogProgress.dView.progress_bar.progress = it
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -209,47 +214,11 @@ class WordsFragment :
         resetTrackerAndActionMode()
     }
 
-    override suspend fun deleteWords(view: View, n: Int) {
-        delay(200)
-        val wordIdList = getWordIdList()
-        for (i in 1..n) {
-            val progress = ((i.toFloat() / n) * 100).toInt()
-            val wordId = wordIdList[i - 1]
-            viewModel.deleteWordById(wordId)
-            withContext(Main) {
-                view.percentage.text = getString(R.string._0, progress)
-                view.items.text = getString(R.string._1_1, i, n)
-                view.progress_bar.progress = progress
-
-                resetTrackerAndActionMode()
-            }
-            delay(500)
+    override fun deleteWords(n: Int) = runBlocking {
+        viewModel.deleteWordProgress(n, typeOfDeletion, tracker?.selection)
+        withContext(Main) {
+            resetTrackerAndActionMode()
         }
-        delay(300)
-    }
-
-    private fun getWordIdList(): List<Int> {
-        val wm = viewModel.allWords.value!!
-        var wordId: Int
-        val list = ArrayList<Int>()
-        when (typeOfDeletion) {
-            DELETE_ICON_PRESSED -> {
-                tracker!!.selection.map {
-                    wordId = wm[it.toInt()].wordId!!
-                    list.add(wordId)
-                }
-            }
-            DELETE_ALL_WORDS -> {
-                wm.map {
-                    wordId = it.wordId!!
-                    list.add(wordId)
-                }
-            }
-            else -> {
-                list.add(viewModel.oneWordId)
-            }
-        }
-        return list
     }
 
     private fun searchWord(p0: String?) {

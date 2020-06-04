@@ -18,9 +18,9 @@ import kotlinx.coroutines.withContext
 class DeleteDialogProgress : AppCompatDialogFragment() {
     companion object {
         var deleteWordsListener: IDeleteWords? = null
+        lateinit var dView: View
     }
 
-    private lateinit var dView: View
     private var args: Bundle? = null
     private var numberOfItemsToDelete: Int = 0
 
@@ -46,7 +46,7 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
     override fun onResume() {
         super.onResume()
         CoroutineScope(IO).launch {
-            deleteWordsListener?.deleteWords(dView, numberOfItemsToDelete)
+            deleteWordsListener?.deleteWords(numberOfItemsToDelete)
             closeDialog()
         }
     }
