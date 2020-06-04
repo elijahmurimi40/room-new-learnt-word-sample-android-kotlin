@@ -21,6 +21,7 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     var oneWordId: Int = 0
+    var numberOfItemsToDelete: Int = 0
 
     private var _progress = MutableLiveData<Int>()
     var progress: LiveData<Int> = _progress

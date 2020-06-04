@@ -101,6 +101,10 @@ class WordsFragment :
             DeleteDialogProgress.dView.percentage.text = getString(R.string._0, it)
             DeleteDialogProgress.dView.progress_bar.progress = it
         })
+
+        viewModel.i.observe(viewLifecycleOwner, Observer {
+            DeleteDialogProgress.dView.items.text = getString(R.string._1_1, it, viewModel.numberOfItemsToDelete)
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -326,6 +330,7 @@ class WordsFragment :
     }
 
     private fun openDeleteDialogProgress(numberOfItems: Int, type: String) {
+        viewModel.numberOfItemsToDelete = numberOfItems
         val deleteDialogProgress = DeleteDialogProgress()
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS_TO_DELETE, numberOfItems)
