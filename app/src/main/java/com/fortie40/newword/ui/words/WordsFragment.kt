@@ -20,7 +20,7 @@ import com.fortie40.newword.dialogs.DeleteDialogProgress
 import com.fortie40.newword.helperclasses.HelperFunctions
 import com.fortie40.newword.interfaces.IClickListener
 import com.fortie40.newword.interfaces.IDeleteDialogListener
-import com.fortie40.newword.interfaces.IDeleteWords
+import com.fortie40.newword.interfaces.IDeleteProgressDialog
 import com.fortie40.newword.interfaces.IWordsActionModeListener
 import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,7 +32,7 @@ import timber.log.Timber
 import java.lang.Runnable
 
 class WordsFragment :
-    Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener, IDeleteWords {
+    Fragment(), IClickListener, IDeleteDialogListener, IWordsActionModeListener, IDeleteProgressDialog {
 
     private lateinit var wordsFragmentBinding: WordsFragmentBinding
     private lateinit var root: View
@@ -174,7 +174,7 @@ class WordsFragment :
     override fun onResume() {
         super.onResume()
         DeleteDialog.deleteDialogListener = this
-        DeleteDialogProgress.deleteWordsListener = this
+        DeleteDialogProgress.deleteProgressDialog = this
     }
 
     override fun onPause() {

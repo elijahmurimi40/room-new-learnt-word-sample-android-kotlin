@@ -7,7 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.fortie40.newword.*
-import com.fortie40.newword.interfaces.IDeleteWords
+import com.fortie40.newword.interfaces.IDeleteProgressDialog
 import kotlinx.android.synthetic.main.delete_dialog_progress.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 
 class DeleteDialogProgress : AppCompatDialogFragment() {
     companion object {
-        var deleteWordsListener: IDeleteWords? = null
+        var deleteProgressDialog: IDeleteProgressDialog? = null
         lateinit var dView: View
     }
 
@@ -46,7 +46,7 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
     override fun onResume() {
         super.onResume()
         CoroutineScope(IO).launch {
-            deleteWordsListener?.deleteWords(numberOfItemsToDelete)
+            deleteProgressDialog?.deleteWords(numberOfItemsToDelete)
             closeDialog()
         }
     }
