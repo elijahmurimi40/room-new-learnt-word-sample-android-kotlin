@@ -1,5 +1,7 @@
 package com.fortie40.newword.ui.words
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
@@ -240,6 +242,8 @@ class WordsFragment :
             resetTrackerAndActionMode()
             HelperFunctions.showShortSnackBar(requireView(), getString(R.string.deleting_canceled))
         }
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
     }
 
     private fun searchWord(p0: String?) {
@@ -340,6 +344,12 @@ class WordsFragment :
     }
 
     private fun openDeleteDialogProgress(numberOfItems: Int, type: String) {
+        val currentOrientation = resources.configuration.orientation
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE)
+            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
+        else
+            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+
         viewModel.numberOfItemsToDelete = numberOfItems
         viewModel.isDeleteDialogProgressDismissed = false
         val deleteDialogProgress = DeleteDialogProgress()
