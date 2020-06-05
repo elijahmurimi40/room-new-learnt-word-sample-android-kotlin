@@ -51,6 +51,7 @@
     <string name="search_anything">Search Anything</string>
     <string name="no_results_found">No results found for %1$s</string>
     <string name="items_to_delete">1</string>
+    <string name="deleting_canceled">Deleting Canceled</string>
 
     <!-- add edit word fragment -->
     <string name="add_word">Add Word</string>

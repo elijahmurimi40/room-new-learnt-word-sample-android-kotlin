@@ -238,6 +238,7 @@ class WordsFragment :
             viewModel.stopDeleting()
             viewModel.isDeleteDialogProgressDismissed = true
             resetTrackerAndActionMode()
+            HelperFunctions.showShortSnackBar(requireView(), getString(R.string.deleting_canceled))
         }
     }
 
