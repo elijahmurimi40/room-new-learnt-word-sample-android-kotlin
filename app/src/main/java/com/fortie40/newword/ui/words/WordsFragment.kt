@@ -232,6 +232,15 @@ class WordsFragment :
         }
     }
 
+    override fun onDeleteProgressDialogDismiss() {
+        if (viewModel.progress.value != 100) {
+            Timber.d("Dialog dismissed")
+            viewModel.stopDeleting()
+            viewModel.isDeleteDialogProgressDismissed = true
+            resetTrackerAndActionMode()
+        }
+    }
+
     private fun searchWord(p0: String?) {
         if (wordAdapter.wOriginalList.isEmpty()) {
             when(p0) {
@@ -331,11 +340,13 @@ class WordsFragment :
 
     private fun openDeleteDialogProgress(numberOfItems: Int, type: String) {
         viewModel.numberOfItemsToDelete = numberOfItems
+        viewModel.isDeleteDialogProgressDismissed = false
         val deleteDialogProgress = DeleteDialogProgress()
         val args = Bundle()
         args.putInt(NUMBER_OF_ITEMS_TO_DELETE, numberOfItems)
         typeOfDeletion = type
         deleteDialogProgress.arguments = args
+        deleteDialogProgress.isCancelable = true
         deleteDialogProgress.show(requireActivity().supportFragmentManager, DELETE_DIALOG_PROGRESS)
     }
 

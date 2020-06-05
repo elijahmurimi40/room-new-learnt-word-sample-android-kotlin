@@ -2,6 +2,7 @@ package com.fortie40.newword.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +50,11 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
             deleteProgressDialog?.deleteWords(numberOfItemsToDelete)
             closeDialog()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        deleteProgressDialog?.onDeleteProgressDialogDismiss()
+        super.onDismiss(dialog)
     }
 
     private suspend fun closeDialog() {

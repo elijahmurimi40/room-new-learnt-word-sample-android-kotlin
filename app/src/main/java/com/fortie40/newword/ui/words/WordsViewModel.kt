@@ -11,6 +11,7 @@ import com.fortie40.newword.roomdatabase.WordModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import timber.log.Timber
 
 class WordsViewModel(application: Application) : AndroidViewModel(application) {
     private val wordsRepository: WordsRepository = WordsRepository(application)
@@ -22,6 +23,7 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
 
     var oneWordId: Int = 0
     var numberOfItemsToDelete: Int = 0
+    var isDeleteDialogProgressDismissed: Boolean = false
 
     private var _progress = MutableLiveData<Int>()
     var progress: LiveData<Int> = _progress
@@ -29,8 +31,10 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     private var _i = MutableLiveData<Int>()
     var i: LiveData<Int> = _i
 
+    private lateinit var job: Job
+
     private fun deleteWordById(id: Int) {
-        CoroutineScope(IO).launch {
+        job = CoroutineScope(IO).launch {
             wordsRepository.deleteWordById(id)
         }
     }
@@ -39,6 +43,9 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
         delay(200)
         val wordIdList = getWordIdList(type, selection)
         for (i in 1..n) {
+            if (isDeleteDialogProgressDismissed) {
+                break
+            }
             val wordId = wordIdList[i - 1]
             deleteWordById(wordId)
             withContext(Main) {
@@ -73,5 +80,13 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         return list
+    }
+
+    fun stopDeleting() = runBlocking {
+        if (this@WordsViewModel::job.isInitialized) {
+            job.cancelAndJoin()
+        } else {
+            Timber.e("Job is not initialized")
+        }
     }
 }
