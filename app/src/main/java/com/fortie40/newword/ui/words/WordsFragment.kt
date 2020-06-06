@@ -57,6 +57,7 @@ class WordsFragment :
         fun resetTrackerAndActionMode() {
             isInActionMode = false
             tracker!!.clearSelection()
+            actionMode?.finish()
             actionMode = null
         }
     }
@@ -90,12 +91,19 @@ class WordsFragment :
         )
         swipe_to_refresh.setOnRefreshListener {
             getWords()
+            searchView.isIconified = true
+            resetTrackerAndActionMode()
         }
 
         // navigate to add edit word fragment
         addNewWord.setOnClickListener(
             Navigation.createNavigateOnClickListener(R.id.action_wordsFragment_to_addEditWordFragment)
         )
+
+        wordAdapter = WordsAdapter(this)
+        word_items.adapter = wordAdapter
+        setUpTracker()
+
         getWords()
 
         viewModel.progress.observe(viewLifecycleOwner, Observer {
@@ -272,9 +280,6 @@ class WordsFragment :
 
     private fun getWords() {
         swipe_to_refresh.isRefreshing = true
-        wordAdapter = WordsAdapter(this)
-        word_items.adapter = wordAdapter
-        setUpTracker()
         viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
             if (words.isEmpty()) {
                 no_words.visibility = View.VISIBLE
