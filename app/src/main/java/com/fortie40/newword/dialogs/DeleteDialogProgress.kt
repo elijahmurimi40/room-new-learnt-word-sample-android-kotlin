@@ -39,6 +39,10 @@ class DeleteDialogProgress : AppCompatDialogFragment() {
             dView.progress_bar.progress = PROGRESS_MIN
             dView.progress_bar.max = PROGRESS_MAX
             builder.setView(dView)
+                .setNegativeButton(getString(R.string.cancel_dialog)) { _, _ ->
+                    dialog!!.cancel()
+                    dialog!!.dismiss()
+                }
 
             builder.create()
         }
