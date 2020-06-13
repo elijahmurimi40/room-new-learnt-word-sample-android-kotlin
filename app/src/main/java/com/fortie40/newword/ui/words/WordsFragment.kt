@@ -45,21 +45,15 @@ class WordsFragment :
 
     private var isInitialized: Boolean = false
     private var _savedInstanceState: Bundle? = null
+    private var isInActionMode: Boolean = false
+    private var tracker: SelectionTracker<Long>? = null
+    private var actionMode: ActionMode? = null
     private var typeOfDeletion: String = ""
 
     private val viewModel by viewModels<WordsViewModel>()
 
     companion object {
-        private var isInActionMode: Boolean = false
-        private var tracker: SelectionTracker<Long>? = null
-        private var actionMode: ActionMode? = null
-
-        fun resetTrackerAndActionMode() {
-            isInActionMode = false
-            tracker!!.clearSelection()
-            actionMode?.finish()
-            actionMode = null
-        }
+        fun newInstance() = WordsFragment()
     }
 
     override fun onCreateView(
@@ -252,6 +246,13 @@ class WordsFragment :
         }
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
+    }
+
+    fun resetTrackerAndActionMode() {
+        isInActionMode = false
+        tracker!!.clearSelection()
+        actionMode?.finish()
+        actionMode = null
     }
 
     private fun searchWord(p0: String?) {
