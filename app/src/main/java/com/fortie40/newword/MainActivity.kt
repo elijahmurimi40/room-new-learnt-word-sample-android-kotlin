@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onContextMenuClosed(menu: Menu) {
         super.onContextMenuClosed(menu)
-        WordsFragment.newInstance().resetTrackerAndActionMode()
+        WordsFragment.resetTrackerAndActionMode()
         Timber.d("Closed")
     }
 
