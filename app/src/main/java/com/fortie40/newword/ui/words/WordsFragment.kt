@@ -101,10 +101,9 @@ class WordsFragment :
         )
 
         wordAdapter = WordsAdapter(this)
-        word_items.adapter = wordAdapter
-        setUpTracker()
 
         getWords()
+        setUpTracker()
 
         viewModel.progress.observe(viewLifecycleOwner, Observer {
             Timber.d("Progreee is $it")
@@ -280,6 +279,7 @@ class WordsFragment :
 
     private fun getWords() {
         swipe_to_refresh.isRefreshing = true
+        word_items.adapter = wordAdapter
         viewModel.allWords.observe(viewLifecycleOwner, Observer { words ->
             if (words.isEmpty()) {
                 no_words.visibility = View.VISIBLE
