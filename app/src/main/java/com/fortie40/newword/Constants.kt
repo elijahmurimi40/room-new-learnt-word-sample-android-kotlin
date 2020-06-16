@@ -32,3 +32,6 @@ const val DELETE_ALL_WORDS = "delete_all_words"
 
 // String for deleting one word onContextItemSelected
 const val DELETE_ONE_WORD = "delete_one_word"
+
+// String to show if floating contextual menu is visible
+const val FLOATING_CONTEXT_MENU_VISIBLE = "floating_context_menu_visible"

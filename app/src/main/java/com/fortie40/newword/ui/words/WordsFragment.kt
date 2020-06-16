@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.SearchView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -53,6 +54,7 @@ class WordsFragment :
         private var isInActionMode: Boolean = false
         private var tracker: SelectionTracker<Long>? = null
         private var actionMode: ActionMode? = null
+        var isFloatingContextMenuOpened: Boolean = false
 
         fun resetTrackerAndActionMode() {
             isInActionMode = false
@@ -119,6 +121,12 @@ class WordsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerForContextMenu(word_items)
+        if (savedInstanceState != null && savedInstanceState.getBoolean(FLOATING_CONTEXT_MENU_VISIBLE)) {
+            isFloatingContextMenuOpened = true
+            word_items.doOnPreDraw {
+                word_items.showContextMenu()
+            }
+        }
     }
 
     override fun onCreateContextMenu(
@@ -145,6 +153,7 @@ class WordsFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         tracker?.onSaveInstanceState(outState)
         outState.putBoolean(IS_IN_ACTION_MODE, isInActionMode)
+        outState.putBoolean(FLOATING_CONTEXT_MENU_VISIBLE, isFloatingContextMenuOpened)
         super.onSaveInstanceState(outState)
     }
 
@@ -206,6 +215,7 @@ class WordsFragment :
     override fun onWordLongClick(id: Int) {
         Timber.i("I was Long Clicked")
         if (!searchView.isIconified) {
+            isFloatingContextMenuOpened = true
             word_items.showContextMenu()
             viewModel.oneWordId = id
             Timber.d("$id")
