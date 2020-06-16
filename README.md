@@ -10,6 +10,36 @@ Minimum Android Version 5.0 (Lollipop)
 	Used Kotlin coroutines delay function to simulate long running tasks
 	
 ### Demos
+#### Adding a word
+<img 
+	src="demo/add_edit1.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/add_edit2.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+<img 
+	src="demo/add_edit3.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/add_edit4.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+#### Updating a word
+<img 
+	src="demo/add_edit5.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/add_edit6.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+#### Deleting a word
+<img
+	src="demo/add_edit7.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/add_edit8.png" 
+	alt="Demo" height="500px" hspace="20" />
 
 ## License
 
