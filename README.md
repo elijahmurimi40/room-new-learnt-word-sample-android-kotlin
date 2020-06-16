@@ -6,6 +6,11 @@
 
 Minimum Android Version 5.0 (Lollipop)
 
+#### PS
+	Used Kotlin coroutines delay function to simulate long running tasks
+	
+### Demos
+
 ## License
 
 MIT License
