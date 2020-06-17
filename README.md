@@ -40,6 +40,38 @@ Minimum Android Version 5.0 (Lollipop)
 <img 
 	src="demo/add_edit8.png" 
 	alt="Demo" height="500px" hspace="20" />
+	
+#### Searching a non-existing word and all words display
+<img 
+	src="demo/word_frag1.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/word_frag2.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+#### Searching for an existing word and delete all words option
+<img 
+	src="demo/word_frag3.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/word_frag4.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+#### Showing action mode on long press when search view is closed and showing floating context menu on long press when search view is opened
+<img 
+	src="demo/word_frag5.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/word_frag6.png" 
+	alt="Demo" height="500px" hspace="20" />
+	
+#### Deleting word/ words progress bar and deleting word/ words cancelled
+<img 
+	src="demo/word_frag7.png" 
+	alt="Demo" height="500px" hspace="20" />
+<img 
+	src="demo/word_frag8.png" 
+	alt="Demo" height="500px" hspace="20" />
 
 ## License
 
