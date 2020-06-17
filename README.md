@@ -72,6 +72,11 @@ Minimum Android Version 5.0 (Lollipop)
 <img 
 	src="demo/word_frag8.png" 
 	alt="Demo" height="500px" hspace="20" />
+	
+#### Swipe down to refresh
+<img 
+	src="demo/swipe_to_refresh.jpg" 
+	alt="Demo" height="500px" hspace="20" />
 
 ## License
 
