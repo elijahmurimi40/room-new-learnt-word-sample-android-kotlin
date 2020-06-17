@@ -248,6 +248,7 @@ class WordsFragment :
         viewModel.deleteWordProgress(n, typeOfDeletion, tracker?.selection)
         withContext(Main) {
             resetTrackerAndActionMode()
+            HelperFunctions.showShortSnackBar(requireView(), getString(R.string.successfully_deleted))
         }
     }
 
